@@ -1,0 +1,217 @@
+version: '3.8'
+
+services:
+  # Frontend Service
+  frontend:
+    container_name: battery-dashboard-frontend
+    build:
+      context: ./public
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://backend:5000
+      - REACT_APP_ENV=production
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - battery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./public/dist:/app/dist:ro
+    labels:
+      - "com.battery-dashboard.service=frontend"
+
+  # Backend Service
+  backend:
+    container_name: battery-dashboard-backend
+    build:
+      context: ./src/services
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - LOG_LEVEL=info
+      - REDIS_URL=redis://redis:6379
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=
+      - DB_PASS=
+      - CORS_ORIGIN=http://localhost:3000
+      - API_KEY=
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - battery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:5000/api/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./src/services/logs:/app/logs
+    labels:
+      - "com.battery-dashboard.service=backend"
+
+  # PostgreSQL Database
+  postgres:
+    container_name: battery-dashboard-postgres
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=battery_dashboard
+      - POSTGRES_INITDB_ARGS=-c shared_preload_libraries=pg_stat_statements
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/services/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - battery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "com.battery-dashboard.service=database"
+
+  # Redis Cache
+  redis:
+    container_name: battery-dashboard-redis
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass 
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - battery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "com.battery-dashboard.service=cache"
+
+  # Nginx Reverse Proxy
+  nginx:
+    container_name: battery-dashboard-nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./src/services/logs/nginx:/var/log/nginx
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - battery-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.battery-dashboard.service=proxy"
+
+  # Optional: pgAdmin for Database Management
+  pgadmin:
+    container_name: battery-dashboard-pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=
+      - PGADMIN_DEFAULT_PASSWORD=
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - battery-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    labels:
+      - "com.battery-dashboard.service=admin"
+
+  # Optional: Prometheus for Monitoring
+  prometheus:
+    container_name: battery-dashboard-prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - battery-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+    labels:
+      - "com.battery-dashboard.service=monitoring"
+
+  # Optional: Grafana for Dashboards
+  grafana:
+    container_name: battery-dashboard-grafana
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=
+      - GF_SECURITY_ADMIN_USER=
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - battery-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    labels:
+      - "com.battery-dashboard.service=dashboard"
+
+# Volumes for persistent data
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+# Network for service communication
+networks:
+  battery-network:
+    driver: bridge

@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0a0d14;
+    color: #e8edf8;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f1420;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a3350;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a4560;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-1 border border-surface-border rounded-xl;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-accent-cyan/30 hover:bg-surface-2;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium;
+  }
+
+  .btn-primary {
+    @apply bg-accent-cyan text-surface font-semibold text-sm px-4 py-2 rounded-lg 
+           hover:bg-accent-cyan/90 transition-colors duration-150 font-sans;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary text-sm px-4 py-2 rounded-lg border border-surface-border
+           hover:border-accent-cyan/40 hover:text-text-primary transition-all duration-150 font-sans;
+  }
+
+  .section-title {
+    @apply text-xs font-mono font-medium text-text-muted uppercase tracking-widest;
+  }
+
+  .metric-value {
+    @apply font-mono text-2xl font-bold text-text-primary;
+  }
+
+  .metric-label {
+    @apply text-xs text-text-secondary font-sans mt-1;
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+  }
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.4), rgba(157, 125, 255, 0.2), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Chart tooltip */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: #141928 !important;
+  border: 1px solid #2a3350 !important;
+  border-radius: 8px !important;
+}
+
+/* Stagger animation helper */
+.stagger-children > * {
+  animation: slideUp 0.4s ease forwards;
+  opacity: 0;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.30s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.40s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
