@@ -1,29 +1,42 @@
-# 🔋 Battery State-of-Health Prediction
+# 🔋 Battery State-of-Health (SoH) Prediction
 
 ## 📖 Overview
-This project predicts the State-of-Health (SoH) of lithium-ion batteries using deep learning. It compares different activation functions (ReLU, Sigmoid, Tanh) to analyze their impact on model performance.
+This project predicts the State-of-Health (SoH) of lithium-ion batteries using deep learning. It focuses on comparing different activation functions (ReLU, Sigmoid, Tanh) and analyzing their impact on model performance.
 
 ## 🎯 Objective
-- Predict battery health accurately
-- Compare activation functions
-- Analyze training performance
+- Predict battery degradation over time  
+- Compare activation functions  
+- Evaluate model performance  
 
-## ⚙️ Features
-- Deep learning model implementation
-- Comparative analysis of activation functions
-- Visualization of training results
-- Performance metrics (MSE, RMSE)
+## 📂 Dataset
+The dataset consists of battery charge-discharge cycle data including:
+- Voltage  
+- Current  
+- Capacity  
+- Cycle count  
 
-## 🛠️ Tech Stack
-- Python
-- TensorFlow / Keras
-- NumPy, Pandas
-- Matplotlib
+These features are used to estimate battery health degradation.
+
+## ⚙️ Methodology
+1. Data preprocessing  
+2. Feature extraction  
+3. Model training using different activation functions  
+4. Performance evaluation using:
+   - MSE  
+   - RMSE  
+
+👉 Data-driven ML methods are widely used for accurate SoH prediction :contentReference[oaicite:1]{index=1}  
 
 ## 📊 Results
-The model shows variation in performance depending on activation function used. ReLU demonstrated faster convergence in most cases.
 
-## 📸 Output Screenshots
+| Activation Function | Performance |
+|--------------------|------------|
+| ReLU              | Best convergence |
+| Sigmoid           | Slower training |
+| Tanh              | Moderate performance |
+
+## 📸 Output
+
 ### Training Loss
 ![Training Loss](src/assets/plots/train_loss.png)
 
@@ -33,19 +46,13 @@ The model shows variation in performance depending on activation function used. 
 ### RMSE
 ![RMSE](src/assets/plots/val_rmse.png)
 
+## 🛠️ Tech Stack
+- Python  
+- TensorFlow / Keras  
+- NumPy, Pandas  
+- Matplotlib  
+
 ## ▶️ How to Run
 ```bash
 pip install -r requirements.txt
 python main.py
-battery-soh-prediction/
-│
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── assets/
-│   │   └── plots/
-│
-├── README.md
-├── requirements.txt
-├── .gitignore
