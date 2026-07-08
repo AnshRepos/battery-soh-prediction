@@ -1,0 +1,199 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#FEATURES">FEATURES</a>
+    <ul>
+      <li><a href="#History">History</a></li>
+      <li><a href="#Debugging-Support">Debugging Support</a></li>
+      <li><a href="#Packages">Packages</a></li>
+      <li><a href="#Multiline-Commands">Multiline Commands</a></li>
+      <li><a href="#Source-File-Support">Source File Support</a></li>
+    </ul>
+  </li>
+  <li><a href="#ENVIRONMENT">ENVIRONMENT</a></li>
+  <li><a href="#FILES">FILES</a></li>
+  <li><a href="#PITFALLS">PITFALLS</a></li>
+  <li><a href="#BUGS">BUGS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#VERSION">VERSION</a></li>
+  <li><a href="#AUTHORS">AUTHORS</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>ptksh - Perl/Tk script to provide a graphical user interface for testing Perl/Tk commands and scripts.</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  <span class="operator">% </span><span class="variable">ptksh</span>  <span class="operator">?</span><span class="variable">scriptfile</span><span class="operator">?</span>
+  <span class="operator">...</span> <span class="variable">version</span> <span class="variable">information</span> <span class="operator">...</span>
+  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="variable">$b</span><span class="operator">=</span><span class="variable">$mw</span><span class="operator">-&gt;</span><span class="variable">Button</span><span class="operator">(</span><span class="string">-text</span><span class="operator">=&gt;</span><span class="string">'Hi'</span><span class="operator">,</span><span class="string">-command</span><span class="operator">=&gt;</span><span class="keyword">sub</span><span class="operator">{</span><span class="keyword">print</span> <span class="string">'Hi'</span><span class="operator">})</span>
+  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="variable">$b</span><span class="operator">-&gt;</span><span class="variable">pack</span>
+  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="variable">o</span> <span class="variable">$b</span>
+  <span class="operator">...</span> <span class="variable">list</span> <span class="variable">of</span> <span class="variable">options</span> <span class="operator">...</span>
+  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="variable">help</span>
+  <span class="operator">...</span> <span class="variable">help</span> <span class="variable">information</span> <span class="operator">...</span>
+  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="keyword">exit</span>
+  <span class="operator">%
+  </span>
+</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>ptksh is a perl/Tk shell to enter perl commands interactively. When one starts ptksh a <a href="../../../Windows/TEMP/ppm-2UUUNV/Tk-804.033/blib/lib/Tk/MainWindow.html">MainWindow</a> is automaticly created, along with a ptksh command window. One can access the main window by typing commands using the variable $mw at the &#39;ptksh&gt; &#39; prompt of the command window.</p>
+
+<p>ptksh supports command line editing and history. Just type &quot;&lt;Up&gt;&quot; at the command prompt to see a history list. The last 50 commands entered are saved, then reloaded into history list the next time you start ptksh.</p>
+
+<p>ptksh supports some convenient commands for inspecting Tk widgets. See below.</p>
+
+<p>To exit ptksh use: <code>exit</code>.</p>
+
+<p>ptksh is <b>*not*</b> a full symbolic debugger. To debug perl/Tk programs at a low level use the more powerful <a href="../lib/pods/perldebug.html">perl debugger</a>. (Just enter ``O tk&#39;&#39; on debuggers command line to start the Tk eventloop.)</p>
+
+<h1 id="FEATURES">FEATURES</h1>
+
+<h2 id="History">History</h2>
+
+<p>Press &lt;Up&gt; (the Up Arrow) in the perlwish window to obtain a gui-based history list. Press &lt;Enter&gt; on any history line to enter it into the perlwish window. Then hit return. So, for example, repeat last command is &lt;Up&gt;&lt;Enter&gt;&lt;Enter&gt;. You can quit the history window with &lt;Escape&gt;. NOTE: history is only saved if exit is &quot;graceful&quot; (i.e. by the &quot;exit&quot; command from the console or by quitting all main windows--NOT by interrupt).</p>
+
+<h2 id="Debugging-Support">Debugging Support</h2>
+
+<p>ptksh provides some convenience function to make browsing in perl/Tk widget easier:</p>
+
+<dl>
+
+<dt id="or-h"><b>?</b>, or <b>h</b></dt>
+<dd>
+
+<p>displays a short help summary.</p>
+
+</dd>
+<dt id="d-or-x-args"><b>d</b>, or <b>x</b> ?<i>args</i>, ...?</dt>
+<dd>
+
+<p>Dumps recursively arguments to stdout. (see <a href="../lib/Data/Dumper.html">Data::Dumper</a>). You must have &lt;Data::Dumper&gt; installed to support this feature.</p>
+
+<p><b>x</b> was introduced for perl debugger compatibility.</p>
+
+</dd>
+<dt id="p-arg"><b>p</b> ?<i>arg</i>, ...?</dt>
+<dd>
+
+<p>appends &quot;|\n&quot; to each of it&#39;s arguments and prints it. If value is <b>undef</b>, &#39;(undef)&#39; is printed to stdout.</p>
+
+</dd>
+<dt id="o-widget--option"><b>o</b> <i>$widget</i> ?<i>-option</i> ...?</dt>
+<dd>
+
+<p>prints the option(s) of <i>$widget</i> one on each line. If no options are given all options of the widget are listed. See <a href="../../../Windows/TEMP/ppm-2UUUNV/Tk-804.033/blib/lib/Tk/options.html">Tk::options</a> for more details on the format and contents of the returned list.</p>
+
+</dd>
+<dt id="o-widget-regexp"><b>o</b> <i>$widget</i> <b>/</b><i>regexp</i><b>/</b></dt>
+<dd>
+
+<p>Lists options of <i>$widget</i> matching the <a href="../lib/pods/perlre.html">regular expression</a> <i>regexp</i>.</p>
+
+</dd>
+<dt id="u-class"><b>u</b> ?<i>class</i>?</dt>
+<dd>
+
+<p>If no argument is given it lists the modules loaded by the commands you executed or since the last time you called <code>u</code>.</p>
+
+<p>If argument is the empty string lists all modules that are loaded by ptksh.</p>
+
+<p>If argument is a string, ``text&#39;&#39; it tries to do a ``use Tk::Text;&#39;&#39;.</p>
+
+</dd>
+</dl>
+
+<h2 id="Packages">Packages</h2>
+
+<p>Ptksh compiles into package Tk::ptksh. Your code is eval&#39;ed into package main. The coolness of this is that your eval code should not interfere with ptksh itself.</p>
+
+<h2 id="Multiline-Commands">Multiline Commands</h2>
+
+<p>ptksh will accept multiline commands. Simply put a &quot;\&quot; character immediately before the newline, and ptksh will continue your command onto the next line.</p>
+
+<h2 id="Source-File-Support">Source File Support</h2>
+
+<p>If you have a perl/Tk script that you want to do debugging on, try running the command</p>
+
+<pre><code>  <span class="variable">ptksh</span><span class="operator">&gt;</span> <span class="keyword">do</span> <span class="string">'myscript'</span><span class="operator">;</span>
+  
+   <span class="operator">--</span> <span class="keyword">or</span>  <span class="operator">(</span><span class="variable">at</span> <span class="variable">shell</span> <span class="variable">command</span> <span class="variable">prompt</span><span class="operator">)</span> <span class="operator">--</span>
+  
+  <span class="operator">% </span><span class="variable">ptksh</span> <span class="variable">myscript</span>
+</code></pre>
+
+<p>Then use the perl/Tk commands to try out different operations on your script.</p>
+
+<h1 id="ENVIRONMENT">ENVIRONMENT</h1>
+
+<p>Looks for your .ptksh_history in the directory specified by the $HOME environment variable ($HOMEPATH on Win32 systems).</p>
+
+<h1 id="FILES">FILES</h1>
+
+<dl>
+
+<dt id="ptksh_init"><i>.ptksh_init</i></dt>
+<dd>
+
+<p>If found in current directory it is read in an evaluated after the mainwindow <i>$mw</i> is created. <i>.ptksh_init</i> can contain any valid perl code.</p>
+
+</dd>
+<dt id="ptksh_history"><i>~/.ptksh_history</i></dt>
+<dd>
+
+<p>Contains the last 50 lines entered in ptksh session(s).</p>
+
+</dd>
+</dl>
+
+<h1 id="PITFALLS">PITFALLS</h1>
+
+<p>It is best not to use &quot;my&quot; in the commands you type into ptksh. For example &quot;my $v&quot; will make $v local just to the command or commands entered until &lt;Return&gt; is pressed. For a related reason, there are no file-scopy &quot;my&quot; variables in the ptksh code itself (else the user might trounce on them by accident).</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p><b>Tk::MainLoop</b> function interactively entered or sourced in a init or script file will block ptksh.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../../../Windows/TEMP/ppm-2UUUNV/Tk-804.033/blib/lib/Tk.html">Tk</a> <a href="../lib/pods/perldebug.html">perldebug</a></p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>VERSION 2.03</p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<p>Mike Beller &lt;beller@penvision.com&gt;, Achim Bohnet &lt;ach@mpe.mpg.de&gt;</p>
+
+<p>Copyright (c) 1996 - 1998 Achim Bohnet and Mike Beller. All rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,158 @@
+Test Case TC-544649: TCS_RingBufferManagement_RBMBuffering_OM
+Pre-Condition
+Power-up the ECU, Voltage=12V, KL30 is connected.
+Flash the Release SW using the flashing script.
+Check if PUTTY is available in Testbench and make necessary SSH and serial connections.
+Test Case Design
+Architecture Baseline Version: ??
+
+Step 1:
+
+Input Operation: Power cycle (PowerOff -> PowerON)
+Expected Result: ECU is turned OFF, then ECU is turned ON.
+Actual Results: ECU is turned OFF, then ECU is turned ON.
+Step 2:
+
+Input Operation: ADISS stub application is executed in SSH using command:
+cd /usr/sbin
+./stub_adiss
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 3:
+
+Input Operation: Verify the API RBM_GetVersion().
+Expected Result: API is invoked with RBM control version.
+Actual Results: API is invoked with RBM control version.
+Step 4:
+
+Input Operation: Verify the current state with API RBM_GetState().
+Expected Result: Returns Current State = RBM_Init().
+Actual Results: Returns Current State = RBM_Init().
+Step 5:
+
+Input Operation: ADISS to enter into "Standby" state:
+RBM_CreateBufswContentTest /opt/asw/bin/ADISS_ringbuffer_config.json
+RBM_EnterStandby()
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 6:
+
+Input Operation: ADISS to enter into "Buffering" state with API RBM_StartBuffering().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 7:
+
+Input Operation: Verify the current state with API RBM_GetState().
+Expected Result: Returns Current State = RBM_StartBuffering (2).
+Actual Results: Returns Current State = RBM_StartBuffering (2).
+Step 8:
+
+Input Operation: ADISS stub application is executed in SSH using command:
+cd /usr/sbin
+./stub_sdsom
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 9:
+
+Input Operation: Verify the current state with API RBM_GetState().
+Expected Result: Returns Current State = RBM_StartBuffering (2).
+Actual Results: Returns Current State = RBM_StartBuffering (2).
+Step 10:
+
+Input Operation: Verify the API RBM_RegCallBack().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 11:
+
+Input Operation: Verify the API RBM_ReqCbk() (e.g. RBM_ReqCbk 1).
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 12:
+
+Input Operation: Hint: Before triggering the events it is important to open the FIFO. Use:
+RBM_GetOMFIFOpath
+RBM_OpenOMFIFO
+Verify the API RBM_trigSingleEvtRecOM() with parameters:
+<priority> <preEventTime> <postEventTime> <listofPDUs>
+Example: RBM_trigSingleEvtRec 20 10 100 443,5905
+Expected Result:
+Return value = 0 (RBM_ok)
+Return a FIFO Path
+Returns the trigger handle
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+Actual Results:
+Return value = 0 (RBM_ok)
+Return a FIFO Path
+Returns the trigger handle
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+Step 13:
+
+Input Operation: Verify the API RBM_GetNumberOfOngoingTriggers().
+Expected Result: This API returns the number of ongoing trigger count.
+Actual Results: This API returns the number of ongoing trigger count.
+Step 14:
+
+Input Operation: Verify the API RBM_StopEvtRec() with parameter:
+<TriggerHandle generated from the previous step>
+Example: RBM_StopEvtRec <TriggerHandle>
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Step 15:
+
+Input Operation: Verify the API RBM_trigEvtRecOnOM() with parameters:
+<priority> <preEventTime> <listofPDUs>
+Example: RBM_trigEvtRecOn 20 10 443,5905
+Expected Result:
+Return value = 0 (RBM_ok)
+Provides the Trigger Handle and Trigger State
+Actual Results:
+Return value = 0 (RBM_ok)
+Step 16:
+
+Input Operation: Verify the API RBM_StopEvtRec() with parameter:
+<TriggerHandle generated from the previous step>
+Example: RBM_StopEvtRec <TriggerHandle>
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Step 17:
+
+Input Operation: Verify the API RBM_trigEvtRecOnOM() with parameters:
+<priority> <preEventTime> <listofPDUs>
+Example: RBM_trigEvtRecOn 20 10 443,5905
+Expected Result:
+Return value = 0 (RBM_ok)
+Provides the Trigger Handle and Trigger State
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+Actual Results:
+Return value = 0 (RBM_ok)
+Provides the Trigger Handle and Trigger State
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+Step 18:
+
+Input Operation: Verify the API RBM_trigEvtRecOff() with parameters:
+<postEventTime> <TriggerHandle>
+Example: RBM_trigEvtRecOff 10 <TriggerHandle>
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Returns Trigger_State = Finished (2)
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns the EUUID
+Returns Trigger_State = Finished (2)
+Step 19:
+
+Input Operation: Verify the API RBM_GetNumberOfOngoingTriggers().
+Expected Result: This API returns the number of ongoing trigger count.
+Actual Results: This API returns the number of ongoing trigger count.
+Post-Condition
+Power down the ECU.
+Putty is closed.

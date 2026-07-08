@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a></li>
+  <li><a href="#COPYRIGHT">COPYRIGHT</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>ptargrep - Apply pattern matching to the contents of files in a tar archive</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  ptargrep [options] &lt;pattern&gt; &lt;tar file&gt; ...
+
+  Options:
+
+   --basename|-b     ignore directory paths from archive
+   --ignore-case|-i  do case-insensitive pattern matching
+   --list-only|-l    list matching filenames rather than extracting matches
+   --verbose|-v      write debugging message to STDERR
+   --help|-?         detailed help message</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This utility allows you to apply pattern matching to <b>the contents</b> of files contained in a tar archive. You might use this to identify all files in an archive which contain lines matching the specified pattern and either print out the pathnames or extract the files.</p>
+
+<p>The pattern will be used as a Perl regular expression (as opposed to a simple grep regex).</p>
+
+<p>Multiple tar archive filenames can be specified - they will each be processed in turn.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<dl>
+
+<dt id="basename-alias--b"><b>--basename</b> (alias -b)</dt>
+<dd>
+
+<p>When matching files are extracted, ignore the directory path from the archive and write to the current directory using the basename of the file from the archive. Beware: if two matching files in the archive have the same basename, the second file extracted will overwrite the first.</p>
+
+</dd>
+<dt id="ignore-case-alias--i"><b>--ignore-case</b> (alias -i)</dt>
+<dd>
+
+<p>Make pattern matching case-insensitive.</p>
+
+</dd>
+<dt id="list-only-alias--l"><b>--list-only</b> (alias -l)</dt>
+<dd>
+
+<p>Print the pathname of each matching file from the archive to STDOUT. Without this option, the default behaviour is to extract each matching file.</p>
+
+</dd>
+<dt id="verbose-alias--v"><b>--verbose</b> (alias -v)</dt>
+<dd>
+
+<p>Log debugging info to STDERR.</p>
+
+</dd>
+<dt id="help-alias"><b>--help</b> (alias -?)</dt>
+<dd>
+
+<p>Display this documentation.</p>
+
+</dd>
+</dl>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 2010 Grant McLean &lt;grantm@cpan.org&gt;</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+</body>
+
+</html>
+
+

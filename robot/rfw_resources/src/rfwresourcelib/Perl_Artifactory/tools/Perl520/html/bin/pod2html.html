@@ -1,0 +1,285 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#ARGUMENTS">ARGUMENTS</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#BUGS">BUGS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#COPYRIGHT">COPYRIGHT</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>pod2html - convert .pod files to .html files</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    pod2html --help --htmldir=&lt;name&gt; --htmlroot=&lt;URL&gt;
+             --infile=&lt;name&gt; --outfile=&lt;name&gt;
+             --podpath=&lt;name&gt;:...:&lt;name&gt; --podroot=&lt;name&gt;
+             --cachedir=&lt;name&gt; --flush --recurse --norecurse
+             --quiet --noquiet --verbose --noverbose
+             --index --noindex --backlink --nobacklink
+             --header --noheader --poderrors --nopoderrors
+             --css=&lt;URL&gt; --title=&lt;name&gt;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Converts files from pod format (see <a href="../lib/pods/perlpod.html">perlpod</a>) to HTML format.</p>
+
+<h1 id="ARGUMENTS">ARGUMENTS</h1>
+
+<p>pod2html takes the following arguments:</p>
+
+<dl>
+
+<dt id="help">help</dt>
+<dd>
+
+<pre><code>  --help</code></pre>
+
+<p>Displays the usage message.</p>
+
+</dd>
+<dt id="htmldir">htmldir</dt>
+<dd>
+
+<pre><code>  --htmldir=name</code></pre>
+
+<p>Sets the directory to which all cross references in the resulting HTML file will be relative. Not passing this causes all links to be absolute since this is the value that tells Pod::Html the root of the documentation tree.</p>
+
+<p>Do not use this and --htmlroot in the same call to pod2html; they are mutually exclusive.</p>
+
+</dd>
+<dt id="htmlroot">htmlroot</dt>
+<dd>
+
+<pre><code>  --htmlroot=URL</code></pre>
+
+<p>Sets the base URL for the HTML files. When cross-references are made, the HTML root is prepended to the URL.</p>
+
+<p>Do not use this if relative links are desired: use --htmldir instead.</p>
+
+<p>Do not pass both this and --htmldir to pod2html; they are mutually exclusive.</p>
+
+</dd>
+<dt id="infile">infile</dt>
+<dd>
+
+<pre><code>  --infile=name</code></pre>
+
+<p>Specify the pod file to convert. Input is taken from STDIN if no infile is specified.</p>
+
+</dd>
+<dt id="outfile">outfile</dt>
+<dd>
+
+<pre><code>  --outfile=name</code></pre>
+
+<p>Specify the HTML file to create. Output goes to STDOUT if no outfile is specified.</p>
+
+</dd>
+<dt id="podroot">podroot</dt>
+<dd>
+
+<pre><code>  --podroot=name</code></pre>
+
+<p>Specify the base directory for finding library pods.</p>
+
+</dd>
+<dt id="podpath">podpath</dt>
+<dd>
+
+<pre><code>  --podpath=name:...:name</code></pre>
+
+<p>Specify which subdirectories of the podroot contain pod files whose HTML converted forms can be linked-to in cross-references.</p>
+
+</dd>
+<dt id="cachedir">cachedir</dt>
+<dd>
+
+<pre><code>  --cachedir=name</code></pre>
+
+<p>Specify which directory is used for storing cache. Default directory is the current working directory.</p>
+
+</dd>
+<dt id="flush">flush</dt>
+<dd>
+
+<pre><code>  --flush</code></pre>
+
+<p>Flush the cache.</p>
+
+</dd>
+<dt id="backlink">backlink</dt>
+<dd>
+
+<pre><code>  --backlink</code></pre>
+
+<p>Turn =head1 directives into links pointing to the top of the HTML file.</p>
+
+</dd>
+<dt id="nobacklink">nobacklink</dt>
+<dd>
+
+<pre><code>  --nobacklink</code></pre>
+
+<p>Do not turn =head1 directives into links pointing to the top of the HTML file (default behaviour).</p>
+
+</dd>
+<dt id="header">header</dt>
+<dd>
+
+<pre><code>  --header</code></pre>
+
+<p>Create header and footer blocks containing the text of the &quot;NAME&quot; section.</p>
+
+</dd>
+<dt id="noheader">noheader</dt>
+<dd>
+
+<pre><code>  --noheader</code></pre>
+
+<p>Do not create header and footer blocks containing the text of the &quot;NAME&quot; section (default behaviour).</p>
+
+</dd>
+<dt id="poderrors">poderrors</dt>
+<dd>
+
+<pre><code>  --poderrors</code></pre>
+
+<p>Include a &quot;POD ERRORS&quot; section in the outfile if there were any POD errors in the infile (default behaviour).</p>
+
+</dd>
+<dt id="nopoderrors">nopoderrors</dt>
+<dd>
+
+<pre><code>  --nopoderrors</code></pre>
+
+<p>Do not include a &quot;POD ERRORS&quot; section in the outfile if there were any POD errors in the infile.</p>
+
+</dd>
+<dt id="index">index</dt>
+<dd>
+
+<pre><code>  --index</code></pre>
+
+<p>Generate an index at the top of the HTML file (default behaviour).</p>
+
+</dd>
+<dt id="noindex">noindex</dt>
+<dd>
+
+<pre><code>  --noindex</code></pre>
+
+<p>Do not generate an index at the top of the HTML file.</p>
+
+</dd>
+<dt id="recurse">recurse</dt>
+<dd>
+
+<pre><code>  --recurse</code></pre>
+
+<p>Recurse into subdirectories specified in podpath (default behaviour).</p>
+
+</dd>
+<dt id="norecurse">norecurse</dt>
+<dd>
+
+<pre><code>  --norecurse</code></pre>
+
+<p>Do not recurse into subdirectories specified in podpath.</p>
+
+</dd>
+<dt id="css">css</dt>
+<dd>
+
+<pre><code>  --css=URL</code></pre>
+
+<p>Specify the URL of cascading style sheet to link from resulting HTML file. Default is none style sheet.</p>
+
+</dd>
+<dt id="title">title</dt>
+<dd>
+
+<pre><code>  --title=title</code></pre>
+
+<p>Specify the title of the resulting HTML file.</p>
+
+</dd>
+<dt id="quiet">quiet</dt>
+<dd>
+
+<pre><code>  --quiet</code></pre>
+
+<p>Don&#39;t display mostly harmless warning messages.</p>
+
+</dd>
+<dt id="noquiet">noquiet</dt>
+<dd>
+
+<pre><code>  --noquiet</code></pre>
+
+<p>Display mostly harmless warning messages (default behaviour). But this is not the same as &quot;verbose&quot; mode.</p>
+
+</dd>
+<dt id="verbose">verbose</dt>
+<dd>
+
+<pre><code>  --verbose</code></pre>
+
+<p>Display progress messages.</p>
+
+</dd>
+<dt id="noverbose">noverbose</dt>
+<dd>
+
+<pre><code>  --noverbose</code></pre>
+
+<p>Do not display progress messages (default behaviour).</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Tom Christiansen, &lt;tchrist@perl.com&gt;.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>See <a href="../lib/Pod/Html.html">Pod::Html</a> for a list of known bugs in the translator.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../lib/pods/perlpod.html">perlpod</a>, <a href="../lib/Pod/Html.html">Pod::Html</a></p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>This program is distributed under the Artistic License.</p>
+
+
+</body>
+
+</html>
+
+

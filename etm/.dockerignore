@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+logs/
+tests/
+.env
+.env.*
+*.md
+!README.md
+mcp.json
+.dockerignore
+.python-version

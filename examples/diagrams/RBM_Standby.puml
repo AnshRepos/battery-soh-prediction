@@ -1,0 +1,77 @@
+@startuml RBM_Standby
+!theme plain
+title RBM_Standby Sequence Diagram
+
+participant ":SC_1412_ADISS" as ADISS
+participant ":SC_1420_SDS_RDC" as RDC
+participant ":SC_1430_SDSOM" as SDSOM
+participant ":rbm_api_interface" as RBM
+
+note over RBM
+Ring Buffer Manager waits for
+the command to start buffering data
+end note
+
+== RBM StandBy: ADISS ==
+
+ADISS -> RBM: RBM_CleanPartition()
+RBM --> ADISS: RBM_ok()
+
+ADISS -> RBM: RBM_GetVersion()
+RBM --> ADISS: Version Info()
+
+ADISS -> RBM: RBM_GetState()
+RBM --> ADISS: RBM_Standby()
+
+ADISS -> RBM: RBM_AddMetaData()
+RBM --> ADISS: RBM_ok()
+
+ADISS -> RBM: RBM_DeleteEntryADISS()
+RBM --> ADISS: RBM_ok()
+
+ADISS -> RBM: RBM_ReqCbk()
+RBM --> ADISS: Callback(RBM_StorSize)
+
+ADISS -> RBM: RBM_StartBuffering()
+RBM --> ADISS: RBM_ok()
+RBM --> ADISS: Callback(RBM_StateChange : RBM_Buffering)
+
+note over RBM
+Alternatively, ADISS may decide to
+request Ring Buffer Manager to go back
+to initialization mode.
+end note
+
+ADISS -> RBM: RBM_ReInit()
+RBM --> ADISS: RBM_ok()
+RBM --> ADISS: Callback(RBM_StateChange : RBM_Init)
+
+== RBM StandBy: SDSRC ==
+
+RDC -> RBM: RBM_CleanPartition()
+RBM --> RDC: RBM_ok()
+
+RDC -> RBM: RBM_GetVersion()
+RBM --> RDC: Version Info()
+
+RDC -> RBM: RBM_GetState()
+RBM --> RDC: RBM_Standby()
+
+RDC -> RBM: RBM_AddMetaData()
+RBM --> RDC: RBM_ok()
+
+RDC -> RBM: RBM_DeleteEntryRDC()
+RBM --> RDC: RBM_ok()
+
+RDC -> RBM: RBM_ReqCbk()
+RBM --> RDC: Callback(RBM_StorSize)
+
+== RBM StandBy: SDSOM ==
+
+SDSOM -> RBM: RBM_GetVersion()
+RBM --> SDSOM: Version Info()
+
+SDSOM -> RBM: RBM_GetState()
+RBM --> SDSOM: RBM_Standby()
+
+@enduml

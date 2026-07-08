@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<pre><code>    ptar - a tar-like program written in perl</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<pre><code>    ptar is a small, tar look-alike program that uses the perl module
+    Archive::Tar to extract, create and list tar archives.</code></pre>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    ptar -c [-v] [-z] [-C] [-f ARCHIVE_FILE | -] FILE FILE ...
+    ptar -c [-v] [-z] [-C] [-T index | -] [-f ARCHIVE_FILE | -]
+    ptar -x [-v] [-z] [-f ARCHIVE_FILE | -]
+    ptar -t [-z] [-f ARCHIVE_FILE | -]
+    ptar -h</code></pre>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<pre><code>    c   Create ARCHIVE_FILE or STDOUT (-) from FILE
+    x   Extract from ARCHIVE_FILE or STDIN (-)
+    t   List the contents of ARCHIVE_FILE or STDIN (-)
+    f   Name of the ARCHIVE_FILE to use. Default is &#39;./default.tar&#39;
+    z   Read/Write zlib compressed ARCHIVE_FILE (not always available)
+    v   Print filenames as they are added or extracted from ARCHIVE_FILE
+    h   Prints this help message
+    C   CPAN mode - drop 022 from permissions
+    T   get names to create from file</code></pre>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<pre><code>    tar(1), L&lt;Archive::Tar&gt;.</code></pre>
+
+
+</body>
+
+</html>
+
+

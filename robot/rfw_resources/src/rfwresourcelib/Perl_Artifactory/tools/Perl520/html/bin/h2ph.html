@@ -1,0 +1,176 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a></li>
+  <li><a href="#ENVIRONMENT">ENVIRONMENT</a></li>
+  <li><a href="#FILES">FILES</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#DIAGNOSTICS">DIAGNOSTICS</a></li>
+  <li><a href="#BUGS">BUGS</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>h2ph - convert .h C header files to .ph Perl header files</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>h2ph [-d destination directory] [-r | -a] [-l] [-h] [-e] [-D] [-Q] [headerfiles]</b></p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><i>h2ph</i> converts any C header files specified to the corresponding Perl header file format. It is most easily run while in /usr/include:</p>
+
+<pre><code>        <span class="variable">cd</span> <span class="operator">/</span><span class="variable">usr</span><span class="operator">/</span><span class="variable">include</span><span class="operator">;</span> <span class="variable">h2ph</span> <span class="operator">*</span> <span class="variable">sys</span><span class="operator">/*</span>
+</code></pre>
+
+<p>or</p>
+
+<pre><code>        <span class="variable">cd</span> <span class="operator">/</span><span class="variable">usr</span><span class="operator">/</span><span class="variable">include</span><span class="operator">;</span> <span class="variable">h2ph</span> <span class="operator">*</span> <span class="variable">sys</span><span class="operator">/*</span> <span class="variable">arpa</span><span class="operator">/*</span> <span class="variable">netinet</span><span class="operator">/*</span>
+</code></pre>
+
+<p>or</p>
+
+<pre><code>        <span class="variable">cd</span> <span class="operator">/</span><span class="variable">usr</span><span class="operator">/</span><span class="variable">include</span><span class="operator">;</span> <span class="variable">h2ph</span> <span class="keyword">-r</span> <span class="keyword">-l</span> <span class="operator">.</span>
+</code></pre>
+
+<p>The output files are placed in the hierarchy rooted at Perl&#39;s architecture dependent library directory. You can specify a different hierarchy with a <b>-d</b> switch.</p>
+
+<p>If run with no arguments, filters standard input to standard output.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<dl>
+
+<dt id="d-destination_dir">-d destination_dir</dt>
+<dd>
+
+<p>Put the resulting <b>.ph</b> files beneath <b>destination_dir</b>, instead of beneath the default Perl library location (<code><span class="variable">$Config</span><span class="operator">{</span><span class="string">'installsitearch'</span><span class="operator">}</span>
+</code>).</p>
+
+</dd>
+<dt id="r">-r</dt>
+<dd>
+
+<p>Run recursively; if any of <b>headerfiles</b> are directories, then run <i>h2ph</i> on all files in those directories (and their subdirectories, etc.). <b>-r</b> and <b>-a</b> are mutually exclusive.</p>
+
+</dd>
+<dt id="a">-a</dt>
+<dd>
+
+<p>Run automagically; convert <b>headerfiles</b>, as well as any <b>.h</b> files which they include. This option will search for <b>.h</b> files in all directories which your C compiler ordinarily uses. <b>-a</b> and <b>-r</b> are mutually exclusive.</p>
+
+</dd>
+<dt id="l">-l</dt>
+<dd>
+
+<p>Symbolic links will be replicated in the destination directory. If <b>-l</b> is not specified, then links are skipped over.</p>
+
+</dd>
+<dt id="h">-h</dt>
+<dd>
+
+<p>Put &#39;hints&#39; in the .ph files which will help in locating problems with <i>h2ph</i>. In those cases when you <b>require</b> a <b>.ph</b> file containing syntax errors, instead of the cryptic</p>
+
+<pre><code>        [ some error condition ] at (eval mmm) line nnn</code></pre>
+
+<p>you will see the slightly more helpful</p>
+
+<pre><code>        [ some error condition ] at filename.ph line nnn</code></pre>
+
+<p>However, the <b>.ph</b> files almost double in size when built using <b>-h</b>.</p>
+
+</dd>
+<dt id="e">-e</dt>
+<dd>
+
+<p>If an error is encountered during conversion, output file will be removed and a warning emitted instead of terminating the conversion immediately.</p>
+
+</dd>
+<dt id="D">-D</dt>
+<dd>
+
+<p>Include the code from the <b>.h</b> file as a comment in the <b>.ph</b> file. This is primarily used for debugging <i>h2ph</i>.</p>
+
+</dd>
+<dt id="Q">-Q</dt>
+<dd>
+
+<p>&#39;Quiet&#39; mode; don&#39;t print out the names of the files being converted.</p>
+
+</dd>
+</dl>
+
+<h1 id="ENVIRONMENT">ENVIRONMENT</h1>
+
+<p>No environment variables are used.</p>
+
+<h1 id="FILES">FILES</h1>
+
+<pre><code> /usr/include/*.h
+ /usr/include/sys/*.h</code></pre>
+
+<p>etc.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Larry Wall</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p>perl(1)</p>
+
+<h1 id="DIAGNOSTICS">DIAGNOSTICS</h1>
+
+<p>The usual warnings if it can&#39;t read or write the files involved.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Doesn&#39;t construct the %sizeof array for you.</p>
+
+<p>It doesn&#39;t handle all C constructs, but it does attempt to isolate definitions inside evals so that you can get at the definitions that it can translate.</p>
+
+<p>It&#39;s only intended as a rough tool. You may need to dicker with the files produced.</p>
+
+<p>You have to run this program by hand; it&#39;s not run as part of the Perl installation.</p>
+
+<p>Doesn&#39;t handle complicated expressions built piecemeal, a la:</p>
+
+<pre><code>    <span class="variable">enum</span> <span class="operator">{</span>
+        <span class="variable">FIRST_VALUE</span><span class="operator">,</span>
+        <span class="variable">SECOND_VALUE</span><span class="operator">,</span>
+    <span class="comment">#ifdef ABC</span>
+        <span class="variable">THIRD_VALUE</span>
+    <span class="comment">#endif</span>
+    <span class="operator">};</span>
+</code></pre>
+
+<p>Doesn&#39;t necessarily locate all of your C compiler&#39;s internally-defined symbols.</p>
+
+
+</body>
+
+</html>
+
+

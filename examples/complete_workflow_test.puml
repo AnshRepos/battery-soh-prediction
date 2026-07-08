@@ -1,0 +1,164 @@
+@startuml complete_workflow_test
+title Complete Workflow Test - ECU Power, Flash, and Communication
+' This diagram tests the complete RQM workflow with Robot Framework generation
+' Expected output: 3 RQM test cases + 3 Robot Framework scripts
+
+'-- FLOW: Happy Path ECU Power-up and Flash
+
+note over ECU, Trace32
+  **Pre-Conditions:**
+  - Power supply connected to ECU
+  - Trace32 debugger connected via JTAG
+  - CANoe configuration available at C:\\canoe\\config\\ecu_test.cfg
+  - Test software hex file ready for flashing
+end note
+
+participant "Power Supply (PPS)" as PPS
+participant "ECU Controller" as ECU
+participant "Trace32 Debugger" as Trace32
+participant "CANoe Simulation" as CANoe
+participant "CAN Bus" as CAN
+
+PPS -> ECU : power_on(12V)
+activate ECU
+ECU --> PPS : power_status(OK)
+
+Trace32 -> ECU : connect_jtag()
+activate Trace32
+ECU --> Trace32 : connection_established()
+
+Trace32 -> Trace32 : load_cmm_script("flash_script.cmm")
+Trace32 -> ECU : flash_software(hex_file)
+note right: Flash operation takes 30-45 seconds
+ECU --> Trace32 : flash_complete(SW_VERSION="v3.2.1")
+
+Trace32 -> ECU : set_breakpoint("MainFunctionR")
+ECU --> Trace32 : breakpoint_set(address=0x80001234)
+
+CANoe -> CANoe : initialize(config="ecu_test.cfg")
+activate CANoe
+CANoe -> CANoe : load_rbs_configuration()
+
+CANoe -> CAN : write_env_var("env_WakeupSleep", 1)
+CAN --> CANoe : env_var_set()
+
+CANoe -> CAN : write_env_var("IgnitionSwitch", 1)
+CAN --> CANoe : env_var_set()
+
+CANoe -> ECU : send_can_message(0x123, data=[0x01, 0x02, 0x03])
+ECU -> ECU : process_can_message()
+ECU --> CANoe : can_ack(0x123)
+
+note over ECU, CANoe
+  **Post-Conditions:**
+  - ECU is powered at 12V
+  - Software version v3.2.1 flashed successfully
+  - Breakpoint set and verified at MainFunctionR
+  - CANoe environment variables configured
+  - CAN communication established
+end note
+
+deactivate Trace32
+deactivate CANoe
+deactivate ECU
+
+'-- FLOW: Timeout Error During Flash
+
+note over ECU, Trace32
+  **Pre-Conditions:**
+  - Power supply connected to ECU
+  - Trace32 debugger connected via JTAG
+  - Invalid or corrupted hex file loaded
+end note
+
+PPS -> ECU : power_on(12V)
+activate ECU
+ECU --> PPS : power_status(OK)
+
+Trace32 -> ECU : connect_jtag()
+activate Trace32
+ECU --> Trace32 : connection_established()
+
+Trace32 -> Trace32 : load_cmm_script("flash_script.cmm")
+Trace32 -> ECU : flash_software(corrupted_hex)
+note right: Flash operation times out after 60 seconds
+
+Trace32 <-- ECU : flash_timeout_error()
+note over Trace32: Error code: 0xE001
+
+Trace32 -> ECU : read_error_status()
+ECU --> Trace32 : error_status(code=0xE001, msg="Flash timeout")
+
+Trace32 -> ECU : reset_ecu()
+ECU -> ECU : perform_software_reset()
+ECU --> Trace32 : reset_complete()
+
+Trace32 -> Trace32 : log_error("Flash timeout - corrupted hex file")
+
+note over ECU, Trace32
+  **Post-Conditions:**
+  - ECU is in reset state
+  - Error logged: Flash timeout (0xE001)
+  - No software flashed (original software intact)
+  - ECU ready for retry with valid hex file
+end note
+
+deactivate Trace32
+deactivate ECU
+
+'-- FLOW: CAN Communication Verification
+
+note over ECU, CAN
+  **Pre-Conditions:**
+  - ECU powered and software flashed
+  - CANoe initialized with RBS configuration
+  - CAN bus initialized at 500 kbps
+  - Environment variables set (WakeupSleep=1, IgnitionSwitch=1)
+end note
+
+activate ECU
+activate CANoe
+
+CANoe -> CAN : initialize_can_bus(baudrate=500000)
+activate CAN
+CAN --> CANoe : bus_initialized()
+
+CANoe -> CAN : send_message(id=0x200, data=[0x10, 0x20, 0x30, 0x40])
+CAN -> ECU : forward_message(0x200)
+ECU -> ECU : validate_message_id(0x200)
+ECU -> ECU : process_data([0x10, 0x20, 0x30, 0x40])
+
+ECU --> CAN : send_response(id=0x201, data=[0x50, 0x60])
+CAN --> CANoe : receive_message(0x201)
+
+CANoe -> CANoe : validate_response(0x201, expected=[0x50, 0x60])
+note right: Validation passed
+
+CANoe -> CAN : send_message(id=0x202, data=[0xFF, 0xFF])
+CAN -> ECU : forward_message(0x202)
+ECU -> ECU : validate_message_id(0x202)
+ECU -> ECU : check_data_range([0xFF, 0xFF])
+note over ECU: Data out of range error
+
+ECU --> CAN : send_error_response(id=0x203, error_code=0x22)
+CAN --> CANoe : receive_message(0x203)
+
+CANoe -> CANoe : log_error("CAN error response: 0x22")
+
+CANoe -> CAN : verify_no_bus_errors()
+CAN --> CANoe : bus_status(OK, error_count=0)
+
+note over ECU, CANoe
+  **Post-Conditions:**
+  - CAN communication verified
+  - Valid message exchange successful
+  - Error handling validated (invalid data rejected)
+  - CAN bus status: OK (no bus errors)
+  - All environment variables maintained
+end note
+
+deactivate CAN
+deactivate CANoe
+deactivate ECU
+
+@enduml

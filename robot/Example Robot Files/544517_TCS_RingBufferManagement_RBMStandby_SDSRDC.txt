@@ -1,0 +1,112 @@
+Test Case TC-544517: TCS_RingBufferManagement_RBMStandby_SDSRDC
+Pre-Condition
+Power-up the ECU, Voltage=12V, KL30 is connected.
+Flash the Release SW using the flashing script.
+Check if PUTTY is available in Testbench and make the necessary SSH and serial connections.
+Test Case Design
+Architecture Baseline Version: ??
+
+Step 1:
+
+Input Operation: Power cycle the ECU from PowerOff to PowerON.
+Expected Result: ECU is turned OFF, then ECU is turned ON.
+Actual Results: ECU is turned OFF, then ECU is turned ON.
+Step 2:
+
+Input Operation: Execute the ADISS stub application in SSH using:
+cd /usr/sbin
+./stub_adiss
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 3:
+
+Input Operation: This step is taken care of in INIT phase. Use RBM_CreateBufswContentTest with /opt/asw/bin/ADISS_ringbuffer_config.json, then invoke RBM_EnterStandBy().
+Expected Result:
+Return value = 0 (RBM_ok)
+Current State = StandBy (1)
+Actual Results:
+Return value = 0 (RBM_ok)
+Current State = StandBy (1)
+Step 4:
+
+Input Operation: Verify the API RBM_GetState().
+Expected Result: Returns Current State = StandBy (1).
+Actual Results: Returns Current State = StandBy (1).
+Step 5:
+
+Input Operation: Execute the SDSRDC stub application in SSH using:
+cd /usr/sbin
+./stub_sdsrdc
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 6:
+
+Input Operation: Verify the API RBM_GetState().
+Expected Result: Returns Current State = StandBy (1).
+Actual Results: Returns Current State = StandBy (1).
+Step 7:
+
+Input Operation: Verify the API RBM_RegCallback().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 8:
+
+Input Operation: Verify the API RBM_ReqCbk(), e.g. RBM_ReqCbk 1.
+Expected Result:
+Return value = 0 (RBM_ok)
+Return the storage size for ADISS and RDC
+Actual Results:
+Return value = 0 (RBM_ok)
+Return the storage size for ADISS and RDC
+Step 9:
+
+Input Operation: Verify the API RBM_CleanPartition() with parameter <partition>, e.g. RBM_CleanPartition 1.
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 10:
+
+Input Operation: Enter ADISS into Buffering state using RBM_StartBuffering().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 11:
+
+Input Operation: Verify the API RBM_GetState() for RDC application.
+Expected Result: Returns Current State = Buffering (2).
+Actual Results: Returns Current State = Buffering (2).
+Step 12:
+
+Input Operation: Verify the API RBM_AddMetaData() with parameters <euuid> <filename> <len> <data>, e.g. RBM_AddMetaData <folder name newly created> metaAdd 3 abc. Hint: to create a folder, use RBM_trigSingleEvtRec 20 10 100 443,5905 Meta.json 3 abc. Folder with EUUID is created in /volume/log2/RDC/; trigger handle is created.
+Expected Result:
+Return value = 0 (RBM_ok)
+Folder with EUUID is created in /volume/log2/RDC/
+Trigger handle is created
+Actual Results:
+Return value = 0 (RBM_ok)
+Folder with EUUID is created in /volume/log2/RDC/
+Trigger handle is created
+Step 13:
+
+Input Operation: Verify the API RBM_DeleteEntryRDC with parameters <euuid>, e.g. API RBM_DeleteEntryRDC <folder name newly created>.
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 14:
+
+Input Operation: Enter StandBy state for ADISS application using RBM_EnterStandby() and check RBM_GetState().
+Expected Result:
+Return value = 0 (RBM_ok)
+Current State = Standyby (1)
+Actual Results:
+Return value = 0 (RBM_ok)
+Current State = Standyby (1)
+Step 15:
+
+Input Operation: Verify the current state for RDC application through RBM_GetState().
+Expected Result:
+Return value = 0 (RBM_ok)
+Current State = Standyby (1)
+Actual Results:
+Return value = 0 (RBM_ok)
+Current State = Standyby (1)
+Post-Condition
+Power down the ECU.
+Putty is closed.

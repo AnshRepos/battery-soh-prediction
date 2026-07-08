@@ -1,0 +1,121 @@
+{
+  "servers": {
+    "etm-python-mcp-server": {
+      "command": "uv",
+      "cwd": "/path/to/repository/pmt-mcp-servers/mcp/etm",
+      "args": [
+        "run",
+        "etmmcpserver.py"
+      ],
+      "env": {
+        "ETM_BASE_URL": "<ETM_BASE_URL>",
+        "ETM_USERNAME": "${input:etm-username}",
+        "ETM_PASSWORD": "${input:etm-password}",
+        "ETM_PROJECT_AREA": "<ETM_PROJECT_AREA>", // optional, can also be set per-request in the prompt
+        "JIRA_PAT": "${input:jira-pat}", // optional: Jira personal access token for Remote Link fallback
+        "JIRA_USERNAME": "${input:jira-username}", // optional: defaults to ETM_USERNAME
+        "JIRA_PASSWORD": "${input:jira-password}", // optional: Jira password for Basic auth fallback
+        "HTTP_PROXY": "http://rb-proxy-de.bosch.com:8080",
+        "HTTPS_PROXY": "http://rb-proxy-de.bosch.com:8080",
+        "http_proxy": "http://rb-proxy-de.bosch.com:8080",
+        "https_proxy": "http://rb-proxy-de.bosch.com:8080",
+        "TRANSPORT": "<TRANSPORT>", //default stdio
+        "HOST": "<HOST>", //default localhost
+        "HOST_PORT": "<HOST_PORT>" //default 8000
+      }
+    },
+    "etm-docker-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--platform",
+        "linux/amd64",
+        "-e",
+        "ETM_BASE_URL",
+        "-e",
+        "ETM_USERNAME",
+        "-e",
+        "ETM_PASSWORD",
+        "-e",
+        "ETM_PROJECT_AREA",
+        "-e",
+        "ETM_VERIFY_SSL",
+        "-e",
+        "CERTIFICATE_PATH",
+        "-e",
+        "HTTP_PROXY",
+        "-e",
+        "HTTPS_PROXY",
+        "-e",
+        "NO_PROXY",
+        "-e",
+        "http_proxy",
+        "-e",
+        "https_proxy",
+        "-e",
+        "no_proxy",
+        "-e",
+        "TRANSPORT",
+        "-e",
+        "HOST",
+        "-e",
+        "HOST_PORT",
+        "-v",
+        "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro",
+        "artifactory.boschdevcloud.com/pmt-mcp-servers-docker-local/etm-mcp-server:0.5.0"
+      ],
+      "env": {
+        "ETM_BASE_URL": "<ETM_BASE_URL>",
+        "ETM_USERNAME": "${input:etm-username}",
+        "ETM_PASSWORD": "${input:etm-password}",
+        "ETM_PROJECT_AREA": "<ETM_PROJECT_AREA>", // optional, can also be set per-request in the prompt
+        "JIRA_PAT": "${input:jira-pat}", // optional: Jira personal access token for Remote Link fallback
+        "JIRA_USERNAME": "${input:jira-username}", // optional: defaults to ETM_USERNAME
+        "JIRA_PASSWORD": "${input:jira-password}", // optional: Jira password for Basic auth fallback
+        "ETM_VERIFY_SSL": "true",
+        "CERTIFICATE_PATH": "",
+        "HTTP_PROXY": "http://rb-proxy-de.bosch.com:8080",
+        "HTTPS_PROXY": "http://rb-proxy-de.bosch.com:8080",
+        "http_proxy": "http://rb-proxy-de.bosch.com:8080",
+        "https_proxy": "http://rb-proxy-de.bosch.com:8080",
+        "TRANSPORT": "<TRANSPORT>", //default stdio
+        "HOST": "<HOST>", //default localhost
+        "HOST_PORT": "<HOST_PORT>" //default 8000
+      }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "etm-password",
+      "description": "ETM PASSWORD",
+      "password": true
+    },
+    {
+      "type": "promptString",
+      "id": "etm-username",
+      "description": "ETM Username",
+      "password": false
+    },
+    {
+      "type": "promptString",
+      "id": "jira-pat",
+      "description": "Jira Personal Access Token (optional, for Remote Link fallback)",
+      "password": true
+    },
+    {
+      "type": "promptString",
+      "id": "jira-username",
+      "description": "Jira Username (optional, defaults to ETM_USERNAME)",
+      "password": false
+    },
+    {
+      "type": "promptString",
+      "id": "jira-password",
+      "description": "Jira Password (optional, for Basic auth fallback)",
+      "password": true
+    }
+  ]
+}

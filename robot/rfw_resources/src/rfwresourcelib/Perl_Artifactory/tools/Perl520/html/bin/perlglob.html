@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>perlglob.bat - a more capable perlglob.exe replacement</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    <span class="variable">@perlfiles</span> <span class="operator">=</span> <span class="keyword">glob</span>  <span class="string">"..\\pe?l/*.p?"</span><span class="operator">;</span>
+    <span class="keyword">print</span> <span class="operator">&lt;..\\</span><span class="variable">pe</span><span class="operator">?</span><span class="variable">l</span><span class="operator">/*.</span><span class="variable">p</span><span class="operator">?&gt;;</span>
+    
+    <span class="comment"># more efficient version</span>
+    <span class="operator">&gt;</span> <span class="variable">perl</span> <span class="operator">-</span><span class="variable">MFile::DosGlob</span><span class="operator">=</span><span class="keyword">glob</span> <span class="keyword">-e</span> <span class="string">"print &lt;../pe?l/*.p?&gt;"</span>
+</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This file is a portable replacement for perlglob.exe. It is largely compatible with perlglob.exe (the Microsoft setargv.obj version) in all but one respect--it understands wildcards in directory components.</p>
+
+<p>It prints null-separated filenames to standard output.</p>
+
+<p>For details of the globbing features implemented, see <a href="../lib/File/DosGlob.html">File::DosGlob</a>.</p>
+
+<p>While one may replace perlglob.exe with this, usage by overriding CORE::glob with File::DosGlob::glob should be much more efficient, because it avoids launching a separate process, and is therefore strongly recommended. See <a href="../lib/pods/perlsub.html">perlsub</a> for details of overriding builtins.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Gurusamy Sarathy &lt;gsar@activestate.com&gt;</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p>perl</p>
+
+<p>File::DosGlob</p>
+
+
+</body>
+
+</html>
+
+

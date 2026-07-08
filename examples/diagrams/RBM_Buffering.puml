@@ -1,0 +1,95 @@
+@startuml RBM_Buffering
+!theme plain
+
+participant SC_1412_ADISS as ADISS
+participant SC_1420_SDS_RDC as RDC
+participant SC_1430_SDSOM as SDSOM
+participant rbm_api_interface as RBM
+
+== RBM_StartBuffering : ADISS ==
+
+ADISS -> RBM: RBM_GetVersion()
+RBM --> ADISS: Version Info()
+ADISS -> RBM: RBM_GetState()
+RBM --> ADISS: RBM_Buffering()
+ADISS -> RBM: RBM_ReqCbk()
+RBM --> ADISS: Callback(RBM_StorSize)
+ADISS -> RBM: RBM_AddMetaData()
+RBM --> ADISS: RBM_Ok()
+ADISS -> RBM: RBM_CleanPartition()
+RBM --> ADISS: RBM_Ok()
+ADISS -> RBM: RBM_DeleteEntryADISS()
+RBM --> ADISS: RBM_Ok()
+ADISS -> RBM: RBM_trigSingleEvtRecADISS(timeOfActivation, priority, preEventTime, postEventTime, listofPDUs, TriggerHandle, metadata, euuid, callback)
+RBM --> ADISS: RBM_Ok()
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_PreEvent)
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_PostEvent)
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_Finished)
+ADISS -> RBM: RBM_StopEvtRec(TriggerHandle, metadata)
+RBM --> ADISS: RBM_Ok()
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_Cancelled)
+ADISS -> RBM: RBM_trigEvtRecOnADISS(listofPDUs, metadata, priority, preEventTime, timeOfActivation, TriggerHandle)
+RBM --> ADISS: RBM_Ok()
+ADISS -> RBM: RBM_trigEvtRecOff(timeOfDeactivation, postEventTime, TriggerHandle, euuid, callback, metadata)
+RBM --> ADISS: RBM_Ok()
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_PreEvent)
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_PostEvent)
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_Finished)
+ADISS -> RBM: RBM_StopEvtRec(TriggerHandle, metadata)
+RBM --> ADISS: RBM_Ok()
+RBM --> ADISS: Callback(RBM_TriggerStateChange: RBM_Cancelled)
+ADISS -> RBM: RBM_EnterStandby()
+RBM --> ADISS: RBM_Ok()
+RBM --> ADISS: Callback(RBM_StateChange:RBM_Standby)
+ADISS -> RBM: RBM_GetNumberOfOngoingTriggers()
+RBM --> ADISS: triggerCount()
+
+== RBM_StartBuffering : SDS:RDC ==
+
+RDC -> RBM: RBM_GetVersion()
+RBM --> RDC: Version Info()
+RDC -> RBM: RBM_GetState()
+RBM --> RDC: RBM_Buffering()
+RDC -> RBM: RBM_ReqCbk()
+RBM --> RDC: Callback(RBM_StorSize)
+RDC -> RBM: RBM_AddMetaData()
+RBM --> RDC: RBM_Ok()
+RDC -> RBM: RBM_CleanPartition()
+RBM --> RDC: RBM_Ok()
+RDC -> RBM: RBM_DeleteEntryRDC()
+RBM --> RDC: RBM_Ok()
+RDC -> RBM: RBM_trigSingleEvtRecRDC(timeOfActivation, priority, preEventTime, postEventTime, listofPDUs, TriggerHandle, metadata, euuid, callback)
+RBM --> RDC: RBM_Ok()
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_PreEvent)
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_PostEvent)
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_Finished)
+RDC -> RBM: RBM_StopEvtRec(TriggerHandle, metadata)
+RBM --> RDC: RBM_Ok()
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_Cancelled)
+RDC -> RBM: RBM_trigEvtRecOnRDC(listofPDUs, metadata, priority, preEventTime, timeOfActivation, TriggerHandle)
+RBM --> RDC: RBM_Ok()
+RDC -> RBM: RBM_trigEvtRecOff(timeOfDeactivation, postEventTime, TriggerHandle, euuid, callback, metadata)
+RBM --> RDC: RBM_Ok()
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_PreEvent)
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_PostEvent)
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_Finished)
+RDC -> RBM: RBM_StopEvtRec(TriggerHandle, metadata)
+RBM --> RDC: RBM_Ok()
+RBM --> RDC: Callback(RBM_TriggerStateChange: RBM_Cancelled)
+
+== RBM_StartBuffering : SDS:OM ==
+
+SDSOM -> RBM: RBM_GetVersion()
+RBM --> SDSOM: Version Info()
+SDSOM -> RBM: RBM_GetState()
+RBM --> SDSOM: RBM_Buffering()
+SDSOM -> RBM: RBM_trigSingleEvtRecOM(timeOfActivation, priority, preEventTime, postEventTime, listofPDUs, TriggerHandle, metadata, euuid, callback)
+RBM --> SDSOM: RBM_Ok()
+SDSOM -> RBM: RBM_StopEvtRec(TriggerHandle, metadata)
+RBM --> SDSOM: RBM_Ok()
+SDSOM -> RBM: RBM_trigEvtRecOnOM(listofPDUs, priority, preEventTime, timeOfActivation, TriggerHandle)
+RBM --> SDSOM: RBM_Ok()
+SDSOM -> RBM: RBM_trigEvtRecOff(timeOfDeactivation, postEventTime, TriggerHandle, euuid, callback, metadata)
+RBM --> SDSOM: RBM_Ok()
+
+@enduml

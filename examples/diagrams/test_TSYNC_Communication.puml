@@ -1,0 +1,58 @@
+@startuml TSYNC_Communication
+
+title TSYNC Communication Sequence Diagram
+
+' Lifelines/Participants
+participant ":ARA_EXM" as ARA_EXM
+participant "lifeline_19999" as SC_TsyncTestApp
+participant ":ARA_LOG" as ARA_LOG
+participant ":SynchronizedTimeBaseConsumer" as TSYNC
+
+' Sequence of Messages
+ARA_EXM -> SC_TsyncTestApp: exec
+
+SC_TsyncTestApp -> ARA_LOG: CreateLogger("EAPP", "Example application")
+
+SC_TsyncTestApp -> TSYNC: GetCurrentTime
+
+SC_TsyncTestApp -> TSYNC: GetRateDeviation
+
+SC_TsyncTestApp -> TSYNC: GetTimeWithStatus
+
+SC_TsyncTestApp -> TSYNC: GetSynchronizationLossCounter
+
+note over TSYNC
+  **SynchronizedTimeBaseConsumer Methods:**
+  
+  **GetCurrentTime()**: Obtain current time 
+  (regardless of sync status)
+  Returns: Current time of synchronized clock
+  
+  **GetRateDeviation()**: Obtain current rate 
+  deviation of the clock
+  Returns: Current rate deviation
+  
+  **GetTimeWithStatus()**: Obtain snapshot of 
+  current clock state
+  Returns: TimeBaseStatus with clock information
+  
+  **GetSynchronizationLossCounter()**: Obtain 
+  synchronization loss counter
+  Returns: Synchronization loss counter
+end note
+
+note over ARA_LOG
+  Context ID: EAPP
+  Log messages for all method invocations
+  with runtime values
+end note
+
+note over SC_TsyncTestApp
+  **Hints for SWE5:**
+  Applicable for 10G interface for DRB
+  
+  To get synchronized status, simulate 
+  time from ICAS node in RBS
+end note
+
+@enduml

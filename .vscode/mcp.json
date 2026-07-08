@@ -1,0 +1,34 @@
+{
+  "servers": {
+    "etm": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "etm",
+        "run",
+        "etmmcpserver.py"
+      ],
+      "env": {
+        "ETM_BASE_URL": "YOUR_BASE_URL", // e.g. https://etm.example.com
+        "ETM_USERNAME": "YOUR_USERNAME",
+        "ETM_PASSWORD": "YOUR_PASSWORD",
+        "ETM_PROJECT_AREA": "YOUR_PROJECT_AREA", // optional, can also be set per-request in the prompt
+        "ETM_VERIFY_SSL": "false", // Disable SSL verification for internal servers with self-signed certificates
+      }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "etm-password",
+      "description": "ETM PASSWORD",
+      "password": true
+    },
+    {
+      "type": "promptString",
+      "id": "etm-username",
+      "description": "ETM Username",
+      "password": false
+    }
+  ]
+}

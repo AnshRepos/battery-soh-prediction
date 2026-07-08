@@ -1,0 +1,76 @@
+@startuml RBM_Init
+title RBM_Init Sequence Diagram
+
+' Lifelines/Participants
+participant ":SC_1412_ADISS" as ADISS
+participant ":rbm_api_interface" as RBM
+participant ":SC_1420_SDS_RDC" as RDC
+participant ":SC_1430_SDSOM" as SDSOM
+
+' Messages
+ADISS -> RBM: RBM_GetVersion
+RBM --> ADISS: Version Info
+
+ADISS -> RBM: RBM_RegCallBack
+RBM --> ADISS: RBM_ok
+
+ADISS -> RBM: RBM_ReqCbk
+RBM --> ADISS: Callback (RBM_StorSize)
+
+ADISS -> RBM: RBM_GetState
+RBM --> ADISS: RBM_Init
+
+ADISS -> RBM: RBM_CreateBufswContent (arg0)
+RBM --> ADISS: RBM_ok
+
+ADISS -> RBM: RBM_GetADISSPrmntStorgPth
+RBM --> ADISS: storgPth
+
+ADISS -> RBM: RBM_EnterStandby
+
+' Conditional fragment
+alt if(isTimeSyncValid
+    RBM --> ADISS: RBM_ok
+else
+    RBM --> ADISS: RBM_NoTSync
+end
+
+RBM --> ADISS: Callback (RBM_StateChange : RBM_Standby)
+
+' Interactions with RDC
+RDC -> RBM: RBM_GetVersion
+RBM --> RDC: Version Info
+
+RBM --> RDC: RBM_ok
+
+RDC -> RBM: RBM_ReqCbk
+RBM --> RDC: Callback (RBM_StorSize)
+
+RBM --> RDC: RBM_GetState
+RBM --> RDC: RBM_Init
+
+RDC -> RBM: RBM_GetRDCPrmntStorgPth
+RBM --> RDC: storgPth
+
+' Interactions with SDSOM
+SDSOM -> RBM: RBM_GetVersion
+RBM --> SDSOM: Version Info
+
+RBM --> SDSOM: RBM_ok
+
+SDSOM -> RBM: RBM_ReqCbk
+RBM --> SDSOM: Callback (RBM_StorSize)
+
+SDSOM -> RBM: RBM_GetState
+RBM --> SDSOM: RBM_Init
+
+SDSOM -> RBM: RBM_GetOMFIFOpath
+RBM --> SDSOM: fifopath
+
+SDSOM -> RBM: RBM_OpenOMFIFO
+RBM --> SDSOM: fifopath
+
+SDSOM -> RBM: RBM_GetOMPrmntStorgPth
+RBM --> SDSOM: storgPth
+
+@enduml

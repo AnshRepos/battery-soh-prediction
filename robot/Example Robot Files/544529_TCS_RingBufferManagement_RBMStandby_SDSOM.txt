@@ -1,0 +1,75 @@
+Test Case TC-544529: TCS_RingBufferManagement_RBMStandby_SDSOM
+Pre-Condition
+Power-up the ECU, Voltage=12V, KL30 is connected.
+Flash the Release SW using the flashing script.
+Check if PUTTY is available in Testbench and make necessary SSH and serial connections.
+Test Case Design
+Architecture Baseline Version: ??
+
+Step 1:
+
+Input Operation: Power cycle the ECU from PowerOff to PowerON.
+Expected Result: ECU is turned OFF, then ECU is turned ON.
+Actual Results: ECU is turned OFF, then ECU is turned ON.
+Step 2:
+
+Input Operation: Execute the ADISS stub application in SSH using:
+cd /usr/sbin
+./stub_adiss
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 3:
+
+Input Operation: SDSOM enters Standby. This requires ADISS to be in StandBy first, so in ADISS INIT state:
+RBM_CreateBufswContentTest /opt/asw/bin/ADISS_ringbuffer_config.json
+RBM_EnterStandby
+Expected Result: Returns RBM_Ok (0).
+Actual Results: Returns RBM_Ok (0).
+Step 4:
+
+Input Operation: Verify the ADISS current state by RBM_GetState().
+Expected Result:
+Returns Current State = Standby (1)
+Returns RBM_Ok (0)
+Actual Results:
+Returns Current State = Standby (1)
+Returns RBM_Ok (0)
+Step 5:
+
+Input Operation: Execute the SDSOM stub application in SSH using:
+cd /usr/sbin
+./stub_sdsom
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 6:
+
+Input Operation: Verify the API RBM_GetState().
+Expected Result:
+Returns Current State = StandBy (1)
+Returns RBM_Ok (0)
+Actual Results:
+Returns Current State = StandBy (1)
+Returns RBM_Ok (0)
+Step 7:
+
+Input Operation: Verify the API RBM_GetVersion().
+Expected Result: Return the application version.
+Actual Results: Return the application version.
+Step 8:
+
+Input Operation: Verify the API RBM_RegCallBack().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 9:
+
+Input Operation: Verify the API RBM_ReqCbk() -> e.g. RBM_ReqCbk 1.
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 10:
+
+Input Operation: Verify the API RBM_GetOMFIFOPath.
+Expected Result: This API returns the FIFO path for OM.
+Actual Results: This API returns the FIFO path for OM.
+Post-Condition
+Power down the ECU.
+Putty is closed.

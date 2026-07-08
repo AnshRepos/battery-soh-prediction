@@ -1,0 +1,176 @@
+Test Case TC-544625: TCS_RingBufferManagement_RBMBuffering_RDC
+Pre-Condition
+Power-up the ECU, Voltage=12V, KL30 is connected.
+Flash the Release SW using the flashing script.
+Check if PUTTY is available in Testbench and make necessary SSH and serial connections.
+Test Case Design
+Architecture Baseline Version: ??
+
+Step 1:
+
+Input Operation: Power cycle the ECU from PowerOff to PowerON.
+Expected Result: ECU is turned OFF, then ECU is turned ON.
+Actual Results: ECU is turned OFF, then ECU is turned ON.
+Step 2:
+
+Input Operation: Execute the ADISS stub application in SSH using command:
+cd /usr/sbin
+./stub_adiss
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 3:
+
+Input Operation: Verify the API RBM_GetVersion().
+Expected Result: Returns the application version.
+Actual Results: Returns the application version.
+Step 4:
+
+Input Operation: ADISS application to enter into StandBy state using:
+RBM_CreateBufswContent()
+Example: RBM_CreateBufswContentTest /opt/asw/bin/ADISS_ringbuffer_config.json
+RBM_EnterStandby()
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 5:
+
+Input Operation: Enter into RBM_Buffering state using API RBM_StartBuffering().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 6:
+
+Input Operation: Execute the SDSRDC stub application in SSH using command:
+cd /usr/sbin
+./stub_sdsrdc
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 7:
+
+Input Operation: Verify RBM_GetState() for RDC application.
+Expected Result: Return the Current State = RBM_StartBuffering (2).
+Actual Results: Return the Current State = RBM_StartBuffering (2).
+Step 8:
+
+Input Operation: Verify the API RBM_RegCallBack() and RBM_ReqCbk() (e.g. RBM_ReqCbk 1 for store size).
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 9:
+
+Input Operation: Verify the API RBM_trigSingleEvtRecRDC() with parameters:
+<priority> <preEventTime> <postEventTime> <listofPDUs> <filename> <len> <data>
+Example: RBM_trigSingleEvtRec 20 10 10 443,5905 metaSin 5 abcde
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+EUUID is created
+Returns Trigger Handle
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+EUUID is created
+Returns Trigger Handle
+Step 10:
+
+Input Operation: Verify the API RBM_AddMetaData() with parameters:
+<euuid> <filename> <len> <data>
+Example: RBM_AddMetaData <euuid id generated from the above step> metaAdd 3 abc
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 11:
+
+Input Operation: Verify the API RBM_DeleteEntryRDC with parameters:
+<euuid>
+Example: API RBM_DeleteEntryRDC <euuid id generated from the above step>
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 12:
+
+Input Operation: Verify the API RBM_trigSingleEvtRecRDC() with parameters:
+<priority> <preEventTime> <postEventTime> <listofPDUs> <filename> <len> <data>
+Example: RBM_trigSingleEvtRec 20 10 100 443,5905 Meta.json 3 abc
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+EUUID is created
+Returns Trigger Handle
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = PreEvent (0) / PostEvent (1) / Finished (2) / Cancelled (3)
+EUUID is created
+Returns Trigger Handle
+Step 13:
+
+Input Operation: Verify the API RBM_StopEvtRec() with parameters:
+<TriggerHandle> <filename> <len> <data>
+Hint: TriggerHandle is generated from the above step
+Example: RBM_StopEvtRec <TriggerHandle> metaStop 3 rfv
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Cancelled (3)
+Returns Trigger Handle
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Cancelled (3)
+Returns Trigger Handle
+Step 14:
+
+Input Operation: Verify the API RBM_trigEvtRecOnRDC() with parameters:
+<priority> <preEventTime> <listofPDUs> <filename> <len> <data>
+Example: RBM_trigEvtRecOn 20 10 443,5905 metaOn 5 abcde
+Expected Result:
+Return value = 0 (RBM_ok)
+This API creates the EUUID
+Returns the Trigger Handle value
+Actual Results:
+Return value = 0 (RBM_ok)
+This API creates the EUUID
+Returns the Trigger Handle value
+Step 15:
+
+Input Operation: Verify the API RBM_StopEvtRec() with parameters:
+<TriggerHandle> <filename> <len> <data>
+Hint: TriggerHandle is generated from the above step
+Example: RBM_StopEvtRec <TriggerHandle> metaStop 5 khihg
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Cancelled (3)
+Returns Trigger Handle
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Cancelled (3)
+Returns Trigger Handle
+Step 16:
+
+Input Operation: Verify the API RBM_trigEvtRecOnRDC() with parameters:
+<priority> <preEventTime> <listofPDUs> <filename> <len> <data>
+Example: RBM_trigEvtRecOn 20 10 443,5905 metaOn 5 abcde
+Expected Result:
+Return value = 0 (RBM_ok)
+This API creates the EUUID
+Returns the Trigger Handle value
+Actual Results:
+Return value = 0 (RBM_ok)
+This API creates the EUUID
+Returns the Trigger Handle value
+Step 17:
+
+Input Operation: Verify the API RBM_trigEvtRecOff() with parameters:
+<postEventTime> <TriggerHandle> <filename> <len> <data>
+Example: RBM_trigEvtRecOff 10 8 metaOff 5 abcde
+Expected Result:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Finished (2)
+EUUID is created
+Returns Trigger Handle
+Actual Results:
+Return value = 0 (RBM_ok)
+Returns Trigger_State = Finished (2)
+EUUID is created
+Returns Trigger Handle
+Step 18:
+
+Input Operation: Verify RBM_GetNumberOfOngoingTriggers.
+Expected Result: Returns the trigger count.
+Actual Results: Returns the trigger count.
+Post-Condition
+Power down the ECU.
+Putty is closed.
