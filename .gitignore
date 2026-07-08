@@ -205,7 +205,3 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-
-# Ignore only the generated ADISS client files
-/tests/generated/robot-framework/TCS_RBM_Init_ADISS_Client.robot
-/tests/generated/tabular/TCS_RBM_Init_ADISS_Client.md
