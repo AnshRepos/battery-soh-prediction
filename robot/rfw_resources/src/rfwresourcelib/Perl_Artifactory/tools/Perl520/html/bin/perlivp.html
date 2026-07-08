@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a></li>
+  <li><a href="#DIAGNOSTICS">DIAGNOSTICS</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>perlivp - Perl Installation Verification Procedure</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>perlivp</b> [<b>-p</b>] [<b>-v</b>] [<b>-h</b>]</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The <b>perlivp</b> program is set up at Perl source code build time to test the Perl version it was built under. It can be used after running:</p>
+
+<pre><code>    make install</code></pre>
+
+<p>(or your platform&#39;s equivalent procedure) to verify that <b>perl</b> and its libraries have been installed correctly. A correct installation is verified by output that looks like:</p>
+
+<pre><code>    ok 1
+    ok 2</code></pre>
+
+<p>etc.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<dl>
+
+<dt id="h-help"><b>-h</b> help</dt>
+<dd>
+
+<p>Prints out a brief help message.</p>
+
+</dd>
+<dt id="p-print-preface"><b>-p</b> print preface</dt>
+<dd>
+
+<p>Gives a description of each test prior to performing it.</p>
+
+</dd>
+<dt id="v-verbose"><b>-v</b> verbose</dt>
+<dd>
+
+<p>Gives more detailed information about each test, after it has been performed. Note that any failed tests ought to print out some extra information whether or not -v is thrown.</p>
+
+</dd>
+</dl>
+
+<h1 id="DIAGNOSTICS">DIAGNOSTICS</h1>
+
+<ul>
+
+<li><p>print &quot;# Perl binary &#39;$perlpath&#39; does not appear executable.\n&quot;;</p>
+
+<p>Likely to occur for a perl binary that was not properly installed. Correct by conducting a proper installation.</p>
+
+</li>
+<li><p>print &quot;# Perl version &#39;$]&#39; installed, expected $ivp_VERSION.\n&quot;;</p>
+
+<p>Likely to occur for a perl that was not properly installed. Correct by conducting a proper installation.</p>
+
+</li>
+<li><p>print &quot;# Perl \@INC directory &#39;$_&#39; does not appear to exist.\n&quot;;</p>
+
+<p>Likely to occur for a perl library tree that was not properly installed. Correct by conducting a proper installation.</p>
+
+</li>
+<li><p>print &quot;# Needed module &#39;$_&#39; does not appear to be properly installed.\n&quot;;</p>
+
+<p>One of the two modules that is used by perlivp was not present in the installation. This is a serious error since it adversely affects perlivp&#39;s ability to function. You may be able to correct this by performing a proper perl installation.</p>
+
+</li>
+<li><p>print &quot;# Required module &#39;$_&#39; does not appear to be properly installed.\n&quot;;</p>
+
+<p>An attempt to <code>eval &quot;require $module&quot;</code> failed, even though the list of extensions indicated that it should succeed. Correct by conducting a proper installation.</p>
+
+</li>
+<li><p>print &quot;# Unnecessary module &#39;bLuRfle&#39; appears to be installed.\n&quot;;</p>
+
+<p>This test not coming out ok could indicate that you have in fact installed a bLuRfle.pm module or that the <code><span class="keyword">eval</span> <span class="string">" require \"</span><span class="variable">$module_name</span><span class="string">.pm\"; "</span>
+</code> test may give misleading results with your installation of perl. If yours is the latter case then please let the author know.</p>
+
+</li>
+<li><p>print &quot;# file&quot;,+($#missing == 0) ? &#39;&#39; : &#39;s&#39;,&quot; missing from installation:\n&quot;;</p>
+
+<p>One or more files turned up missing according to a run of <code>ExtUtils::Installed -&gt; validate()</code> over your installation. Correct by conducting a proper installation.</p>
+
+</li>
+</ul>
+
+<p>For further information on how to conduct a proper installation consult the INSTALL file that comes with the perl source and the README file for your platform.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Peter Prymmer</p>
+
+
+</body>
+
+</html>
+
+

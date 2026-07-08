@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#OPTIONS-AND-ARGUMENTS">OPTIONS AND ARGUMENTS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>podselect - print selected sections of pod documentation on standard output</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>podselect</b> [<b>-help</b>] [<b>-man</b>] [<b>-section</b><span style="white-space: nowrap;"> </span><i>section-spec</i>] [<i>file</i><span style="white-space: nowrap;"> </span>...]</p>
+
+<h1 id="OPTIONS-AND-ARGUMENTS">OPTIONS AND ARGUMENTS</h1>
+
+<dl>
+
+<dt id="help"><b>-help</b></dt>
+<dd>
+
+<p>Print a brief help message and exit.</p>
+
+</dd>
+<dt id="man"><b>-man</b></dt>
+<dd>
+
+<p>Print the manual page and exit.</p>
+
+</dd>
+<dt id="section-section-spec"><b>-section</b><span style="white-space: nowrap;"> </span><i>section-spec</i></dt>
+<dd>
+
+<p>Specify a section to include in the output. See <a href="../lib/Pod/Parser.html#SECTION-SPECIFICATIONS">&quot;SECTION SPECIFICATIONS&quot; in Pod::Parser</a> for the format to use for <i>section-spec</i>. This option may be given multiple times on the command line.</p>
+
+</dd>
+<dt id="file"><i>file</i></dt>
+<dd>
+
+<p>The pathname of a file from which to select sections of pod documentation (defaults to standard input).</p>
+
+</dd>
+</dl>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>podselect</b> will read the given input files looking for pod documentation and will print out (in raw pod format) all sections that match one ore more of the given section specifications. If no section specifications are given than all pod sections encountered are output.</p>
+
+<p><b>podselect</b> invokes the <b>podselect()</b> function exported by <b>Pod::Select</b> Please see <a href="../lib/Pod/Select.html#podselect">&quot;podselect()&quot; in Pod::Select</a> for more details.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../lib/Pod/Parser.html">Pod::Parser</a> and <a href="../lib/Pod/Select.html">Pod::Select</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+
+<p>Brad Appleton &lt;bradapp@enteract.com&gt;</p>
+
+<p>Based on code for <b>Pod::Text::pod2text(1)</b> written by Tom Christiansen &lt;tchrist@mox.perl.com&gt;</p>
+
+
+</body>
+
+</html>
+
+

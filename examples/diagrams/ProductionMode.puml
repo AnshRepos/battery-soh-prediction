@@ -1,0 +1,50 @@
+@startuml ProductionMode_Sequence
+
+title Production Mode Status Management
+
+participant "Socket" as Socket
+participant "ARA_COM(S2S)" as ARA_COM
+participant "OPMM" as OPMM
+participant "rbdm" as rbdm
+participant "ASW" as ASW
+
+loop till KillSwitchIsTrue
+  Socket -> ARA_COM: EventRx_GL2
+  ARA_COM -> OPMM: rbx_Opmm_ProductionModeStatus_Chk
+  
+  alt if(OperatingSystemMode_PowerBlade_From_PduID_1C == 4)
+    note over OPMM
+      rbx_opmm_ProductionMode_Status_u8 
+      set to 1
+    end note
+    
+    OPMM -> rbdm: UpdateDtcAndDidBasedOnProductionModeStatus
+    OPMM -> ASW: SendProductionModeAndVoltageStatusToAsw
+    
+  else
+    note over OPMM
+      rbx_opmm_ProductionMode_Status_u8 
+      set to 0
+    end note
+  end
+  
+  OPMM -> rbdm: UpdateDtcAndDidBasedOnProductionModeStatus
+  OPMM -> ASW: SendProductionModeAndVoltageStatusToAsw
+  OPMM -> ARA_COM: rbx_Opmm_BSW_KeepAwakeRequest_TxUpdate
+  ARA_COM -> Socket: EventTx_GL1
+end
+
+note right of OPMM
+  Production Mode Status is checked
+  based on operating system mode
+  received from PowerBlade (PduID 1C)
+  
+  - Mode 4: Production Mode Active (status = 1)
+  - Other modes: Production Mode Inactive (status = 0)
+  
+  The status is communicated to:
+  - rbdm: for DTC/DID updates
+  - ASW: for production mode handling
+end note
+
+@enduml

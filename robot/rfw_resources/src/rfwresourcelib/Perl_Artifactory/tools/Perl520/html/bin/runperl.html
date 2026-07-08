@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#BUGS">BUGS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>runperl.bat - &quot;universal&quot; batch file to run perl scripts</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>        C:\&gt; copy runperl.bat foo.bat
+        C:\&gt; foo
+        [..runs the perl script &#39;foo&#39;..]
+
+        C:\&gt; foo.bat
+        [..runs the perl script &#39;foo&#39;..]</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This file can be copied to any file name ending in the &quot;.bat&quot; suffix. When executed on a DOS-like operating system, it will invoke the perl script of the same name, but without the &quot;.bat&quot; suffix. It will look for the script in the same directory as itself, and then in the current directory, and then search the directories in your PATH.</p>
+
+<p>It relies on the <code>exec()</code> operator, so you will need to make sure that works in your perl.</p>
+
+<p>This method of invoking perl scripts has some advantages over batch-file wrappers like <code>pl2bat.bat</code>: it avoids duplication of all the code; it ensures <code>$0</code> contains the same name as the executing file, without any egregious &quot;.bat&quot; suffix; it allows you to separate your perl scripts from the wrapper used to run them; since the wrapper is generic, you can use symbolic links to simply link to <code>runperl.bat</code>, if you are serving your files on a filesystem that supports that.</p>
+
+<p>On the other hand, if the batch file is invoked with the &quot;.bat&quot; suffix, it does an extra <code>exec()</code>. This may be a performance issue. You can avoid this by running it without specifying the &quot;.bat&quot; suffix.</p>
+
+<p>Perl is invoked with the -x flag, so the script must contain a <code><span class="comment">#!perl</span>
+</code> line. Any flags found on that line will be honored.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Perl is invoked with the -S flag, so it will search the PATH to find the script. This may have undesirable effects.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p>perl, perlwin32, pl2bat.bat</p>
+
+
+</body>
+
+</html>
+
+

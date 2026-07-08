@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#EXAMPLE">EXAMPLE</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>lwp-download - Fetch large files from the web</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>lwp-download</b> [<b>-a</b>] [<b>-s</b>] &lt;<i>url</i>&gt; [&lt;<i>local path</i>&gt;]</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The <b>lwp-download</b> program will save the file at <i>url</i> to a local file.</p>
+
+<p>If <i>local path</i> is not specified, then the current directory is assumed.</p>
+
+<p>If <i>local path</i> is a directory, then the last segment of the path of the <i>url</i> is appended to form a local filename. If the <i>url</i> path ends with slash the name &quot;index&quot; is used. With the <b>-s</b> option pick up the last segment of the filename from server provided sources like the Content-Disposition header or any redirect URLs. A file extension to match the server reported Content-Type might also be appended. If a file with the produced filename already exists, then <b>lwp-download</b> will prompt before it overwrites and will fail if its standard input is not a terminal. This form of invocation will also fail is no acceptable filename can be derived from the sources mentioned above.</p>
+
+<p>If <i>local path</i> is not a directory, then it is simply used as the path to save into. If the file already exists it&#39;s overwritten.</p>
+
+<p>The <i>lwp-download</i> program is implemented using the <i>libwww-perl</i> library. It is better suited to down load big files than the <i>lwp-request</i> program because it does not store the file in memory. Another benefit is that it will keep you updated about its progress and that you don&#39;t have much options to worry about.</p>
+
+<p>Use the <code>-a</code> option to save the file in text (ascii) mode. Might make a difference on DOSish systems.</p>
+
+<h1 id="EXAMPLE">EXAMPLE</h1>
+
+<p>Fetch the newest and greatest perl version:</p>
+
+<pre><code> $ lwp-download http://www.perl.com/CPAN/src/latest.tar.gz
+ Saving to &#39;latest.tar.gz&#39;...
+ 11.4 MB received in 8 seconds (1.43 MB/sec)</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Gisle Aas &lt;gisle@aas.no&gt;</p>
+
+
+</body>
+
+</html>
+
+

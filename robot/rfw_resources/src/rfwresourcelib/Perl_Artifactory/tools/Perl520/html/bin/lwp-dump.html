@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>lwp-dump - See what headers and content is returned for a URL</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>lwp-dump</b> [ <i>options</i> ] <i>URL</i></p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The <b>lwp-dump</b> program will get the resource identified by the URL and then dump the response object to STDOUT. This will display the headers returned and the initial part of the content, escaped so that it&#39;s safe to display even binary content. The escapes syntax used is the same as for Perl&#39;s double quoted strings. If there is no content the string &quot;(no content)&quot; is shown in its place.</p>
+
+<p>The following options are recognized:</p>
+
+<dl>
+
+<dt id="agent-str"><b>--agent</b> <i>str</i></dt>
+<dd>
+
+<p>Override the user agent string passed to the server.</p>
+
+</dd>
+<dt id="keep-client-headers"><b>--keep-client-headers</b></dt>
+<dd>
+
+<p>LWP internally generate various <code>Client-*</code> headers that are stripped by <b>lwp-dump</b> in order to show the headers exactly as the server provided them. This option will suppress this.</p>
+
+</dd>
+<dt id="max-length-n"><b>--max-length</b> <i>n</i></dt>
+<dd>
+
+<p>How much of the content to show. The default is 512. Set this to 0 for unlimited.</p>
+
+<p>If the content is longer then the string is chopped at the limit and the string &quot;...\n(### more bytes not shown)&quot; appended.</p>
+
+</dd>
+<dt id="method-str"><b>--method</b> <i>str</i></dt>
+<dd>
+
+<p>Use the given method for the request instead of the default &quot;GET&quot;.</p>
+
+</dd>
+<dt id="parse-head"><b>--parse-head</b></dt>
+<dd>
+
+<p>By default <b>lwp-dump</b> will not try to initialize headers by looking at the head section of HTML documents. This option enables this. This corresponds to <a href="../lib/LWP/UserAgent.html#parse_head">&quot;parse_head&quot; in LWP::UserAgent</a>.</p>
+
+</dd>
+<dt id="request"><b>--request</b></dt>
+<dd>
+
+<p>Also dump the request sent.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../bin/lwp-request.html">lwp-request</a>, <a href="../lib/LWP.html">LWP</a>, <a href="../lib/HTTP/Message.html#dump">&quot;dump&quot; in HTTP::Message</a></p>
+
+<p>__END__ :endofperl</p>
+
+
+</body>
+
+</html>
+
+

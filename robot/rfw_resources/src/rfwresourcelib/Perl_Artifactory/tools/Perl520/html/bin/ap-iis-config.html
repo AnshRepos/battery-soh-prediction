@@ -1,0 +1,148 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#COMMANDS">COMMANDS</a>
+    <ul>
+      <li><a href="#add-all">add all</a></li>
+      <li><a href="#delete-all">delete all</a></li>
+      <li><a href="#add-map">add map</a></li>
+      <li><a href="#delete-map">delete map</a></li>
+      <li><a href="#add-vdir">add vdir</a></li>
+      <li><a href="#delete-vdir">delete vdir</a></li>
+      <li><a href="#list-sites">list sites</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>ap-iis-config - Configure IIS for ActivePerl</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  ap-iis-config add all
+  ap-iis-config delete all
+  ap-iis-config list sites
+
+  ap-iis-config add map --ext .cgi --type isapi
+  ap-iis-config delete map --ext .plex
+
+  ap-iis-config add vdir --site 1 --name Sample --path C:\www\samples
+  ap-iis-config delete vdir --site 2 --name &quot;My Site&quot;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>ap-iis-config</b> is a utility to setup IIS for use with ActivePerl. It creates and deletes script mappings and virtual directories.</p>
+
+<p>Currently <b>ap-iis-config</b> only supports numeric site ids. Use the <b>ap-iis-config list sites</b> command to map site ids to descriptive names. The site id 0 can be used to add or remove script mappings from the webserver root itself (inherited by all websites).</p>
+
+<h1 id="COMMANDS">COMMANDS</h1>
+
+<p>All commands support the <b>--verbose</b> option in addition to the command-specific options listed below.</p>
+
+<h2 id="add-all">add all</h2>
+
+<p>The <b>ap-iis-config add all</b> command will add all applicable script mappings to both the root configuration and to the default website.</p>
+
+<pre><code>  ap-iis-config add all [--site ID]* [--cgi] [--isapi] [--perlex]</code></pre>
+
+<p>The <b>--cgi</b> option will add a <code>*.pl</code> mapping for <i>perl.exe</i>. The <b>--isapi</b> option will add a <code>*.plx</code> mapping for <i>perlis.dll</i>, the <i>Perl for ISAPI plugin</i>. The <b>--perlex</b> option will add both <code>*.plex</code> and <code>*.aspl</code> mappings for the PerlEx plugin.</p>
+
+<p>When no options are specified then all available script mappings will be configured.</p>
+
+<p>If no <b>--site</b> is specified, then the script mappings will be added to both the root configuration and to the default web site (sites 0 and 1). In that case <b>ap-iis-config</b> will also add a virtual <i>PerlEx</i> directory to the default web site that will point to the PerlEx samples directory (if PerlEx has been installed).</p>
+
+<p>On Windows Vista and later <b>ap-iis-config add all</b> will attempt to install IIS7 including the optional CGI and ISAPI modules, as required. For older versions of Windows IIS must be installed manually before running this command. If IIS is not yet installed, then <b>ap-iis-config</b> does nothing.</p>
+
+<h2 id="delete-all">delete all</h2>
+
+<p><b>ap-iis-config delete all</b> will remove all Perl script mappings and virtual directories.</p>
+
+<pre><code>  ap-iis-config delete all [--site ID]*</code></pre>
+
+<p>If the <b>--site</b> option is not specified then mappings and directories are removed from the root configuration and default web site only (sites 0 and 1). The <b>--site</b> option also supports the <b>*</b> wildcard argument, which will remove the settings from all sites.</p>
+
+<p>See the description of the <b>delete map</b> and <b>delete vdir</b> for the definition of <i>Perl script mapping</i> and <i>Perl virtual directory</i>.</p>
+
+<h2 id="add-map">add map</h2>
+
+<p><b>ap-iis-config add map</b> adds a script mapping to one or more web sites.</p>
+
+<pre><code>  ap-iis-config add map --ext EXT [--site ID] [--type cgi|isapi|perlex]</code></pre>
+
+<p>By default the mapping is added to the the root configuration (site 0).</p>
+
+<p>The default <b>--type</b> depends on the script extension EXT: for <code>--ext .plx</code> the default is <code>--type isapi</code>, for <code>--ext .plex</code> and <code>--ext .aspl</code> the default is <code>--type perlex</code>. For all other extensions the default is <code>--type cgi</code>.</p>
+
+<h2 id="delete-map">delete map</h2>
+
+<p><b>ap-iis-config delete map</b> removes one or more script mappings from a website.</p>
+
+<pre><code>  ap-iis-config delete map [--site ID] [--ext EXT]</code></pre>
+
+<p>The default for <b>--ext</b> is <code>.pl</code> and for <b>--site</b> is <code>0</code>.</p>
+
+<p>The <b>--ext</b> option also supports the <b>*</b> wildcard argument, which will remove all Perl mappings from the site. A Perl mapping is defined as one that either maps to a script processor in the current Perl <i>bin</i> directory, or a script processor that isn&#39;t installed anymore and that matches the regex <code>/\bperl/i</code>.</p>
+
+<h2 id="add-vdir">add vdir</h2>
+
+<p><b>ap-iis-config add vdir</b> will add a virtual directory to a web site.</p>
+
+<pre><code>  ap-iis-config add vdir --path PATH [--side ID] [--name NAME]</code></pre>
+
+<p>The default site ID is 1. It is not possible to add a virtual directory to the root configuration (site 0).</p>
+
+<p>The physical PATH must exist.</p>
+
+<p>If the <b>--name</b> option is not specified then the lowest level part of PATH will be used for the virtual NAME. For example</p>
+
+<pre><code>  ap-iis-config add vdir --path C:\Perl\eg</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>  ap-iis-config add vdir --site 1 --name eg --path C:\Perl\eg</code></pre>
+
+<h2 id="delete-vdir">delete vdir</h2>
+
+<p><b>ap-iis-config delete vdir</b> removes one or more virtual directories from a web site.</p>
+
+<pre><code>  ap-iis-config delete vdir [--site ID] [--name NAME]</code></pre>
+
+<p>The default site ID is 1.</p>
+
+<p>The <b>--name</b> option also supports the <code>*</code> wildcard argument, which will remove all virtual Perl directories from the specified site. A Perl directory is defined as one whose physical path points anywhere inside the Perl install directory, for example <i>C:\Perl\eg</i>.</p>
+
+<h2 id="list-sites">list sites</h2>
+
+<p><b>ap-iis-config list sites</b> displays a list of all site ids and their descriptions.</p>
+
+<pre><code>  ap-iis-config list sites</code></pre>
+
+<p>There are no further options for this command.</p>
+
+
+</body>
+
+</html>
+
+

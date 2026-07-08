@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>shasum - Print or Check SHA Checksums</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code> Usage: shasum [OPTION]... [FILE]...
+ Print or check SHA checksums.
+ With no FILE, or when FILE is -, read standard input.
+
+   -a, --algorithm   1 (default), 224, 256, 384, 512, 512224, 512256
+   -b, --binary      read in binary mode
+   -c, --check       read SHA sums from the FILEs and check them
+   -t, --text        read in text mode (default)
+   -U, --UNIVERSAL   read in Universal Newlines mode
+                         produces same digest on Windows/Unix/Mac
+   -0, --01          read in BITS mode
+                         ASCII &#39;0&#39; interpreted as 0-bit,
+                         ASCII &#39;1&#39; interpreted as 1-bit,
+                         all other characters ignored
+   -p, --portable    read in portable mode (to be deprecated)
+
+ The following two options are useful only when verifying checksums:
+   -s, --status      don&#39;t output anything, status code shows success
+   -w, --warn        warn about improperly formatted checksum lines
+
+   -h, --help        display this help and exit
+   -v, --version     output version information and exit
+
+ When verifying SHA-512/224 or SHA-512/256 checksums, indicate the
+ algorithm explicitly using the -a option, e.g.
+
+   shasum -a 512224 -c checksumfile
+
+ The sums are computed as described in FIPS PUB 180-4.  When checking,
+ the input should be a former output of this program.  The default
+ mode is to print a line with checksum, a character indicating type
+ (`*&#39; for binary, ` &#39; for text, `U&#39; for UNIVERSAL, `^&#39; for BITS, `?&#39;
+ for portable), and name for each FILE.
+
+ Report shasum bugs to mshelor@cpan.org</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Running <i>shasum</i> is often the quickest way to compute SHA message digests. The user simply feeds data to the script through files or standard input, and then collects the results from standard output.</p>
+
+<p>The following command shows how to compute digests for typical inputs such as the NIST test vector &quot;abc&quot;:</p>
+
+<pre><code>        perl -e &quot;print qq(abc)&quot; | shasum</code></pre>
+
+<p>Or, if you want to use SHA-256 instead of the default SHA-1, simply say:</p>
+
+<pre><code>        perl -e &quot;print qq(abc)&quot; | shasum -a 256</code></pre>
+
+<p>Since <i>shasum</i> mimics the behavior of the combined GNU <i>sha1sum</i>, <i>sha224sum</i>, <i>sha256sum</i>, <i>sha384sum</i>, and <i>sha512sum</i> programs, you can install this script as a convenient drop-in replacement.</p>
+
+<p>Unlike the GNU programs, <i>shasum</i> encompasses the full SHA standard by allowing partial-byte inputs. This is accomplished through the BITS option (<i>-0</i>). The following example computes the SHA-224 digest of the 7-bit message <i>0001100</i>:</p>
+
+<pre><code>        perl -e &quot;print qq(0001100)&quot; | shasum -0 -a 224</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Copyright (c) 2003-2014 Mark Shelor &lt;mshelor@cpan.org&gt;.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><i>shasum</i> is implemented using the Perl module <a href="../lib/Digest/SHA.html">Digest::SHA</a> or <a>Digest::SHA::PurePerl</a>.</p>
+
+
+</body>
+
+</html>
+
+

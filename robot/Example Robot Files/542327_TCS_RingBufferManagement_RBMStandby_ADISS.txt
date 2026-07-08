@@ -1,0 +1,89 @@
+Test Case TC-542327: TCS_RingBufferManagement_RBMStandby_ADISS
+Pre-Condition
+Power-up the ECU, Voltage=12V, KL30 is connected.
+Flash the Release SW using the flashing script.
+Check if PUTTY is available in Testbench and make the necessary SSH and serial connections.
+Test Case Design
+Architecture Baseline Version: ??
+
+Step 1:
+
+Input Operation: Power cycle the ECU from PowerOff to PowerON.
+Expected Result: ECU is turned OFF, then ECU is turned ON.
+Actual Results: ECU is turned OFF, then ECU is turned ON.
+Step 2:
+
+Input Operation: Execute the ADISS stub application in SSH using:
+cd /usr/sbin
+./stub_adiss
+Expected Result: Stub is executed without any errors.
+Actual Results: Stub is executed without any errors.
+Step 3:
+
+Input Operation: In Init state, follow the steps for RBM_CreateBufswContentTest and use /opt/asw/bin/ADISS_ringbuffer_config.json. Then invoke RBM_EnterStandby.
+Expected Result:
+Return value = 0 (RBM_ok)
+Current State = StandBy(1)
+Actual Results:
+Return value = 0 (RBM_ok)
+Current State = StandBy(1)
+Step 4:
+
+Input Operation: Verify the API RBM_GetVersion().
+Expected Result: RBM Version is retrieved along with the RBM Control Version.
+Actual Results: RBM Version is retrieved along with the RBM Control Version.
+Step 5:
+
+Input Operation: Verify the API RBM_GetState().
+Expected Result: Returns Current State = StandBy(1).
+Actual Results: Returns Current State = StandBy(1).
+Step 6:
+
+Input Operation: Verify the API RBM_RegCallBack().
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 7:
+
+Input Operation: Verify the API RBM_ReqCbk(), e.g. RBM_ReqCbk 1.
+Expected Result: This API is invoked with RBM_Storsize.
+Actual Results: This API is invoked with RBM_Storsize.
+Step 8:
+
+Input Operation: Before adding metadata, follow these steps:
+Enter into RBM_Buffering State using RBM_StartBuffering
+Create a folder using RBM_trigSingleEvtRec 20 10 10 443,5905 metaSin 5 abcde
+Folder with EUUID is created in /volume/log2/ADISS/
+Verify the API RBM_AddMetaData() with parameters <euuid> <filename> <len> <data>
+Example: RBM_AddMetaData <folder name newly created> metaAdd 3 abc
+Expected Result:
+Return value = 0 (RBM_ok)
+Metadata is added file "metaAdd"
+Actual Results:
+Return value = 0 (RBM_ok)
+Metadata is added file "metaAdd"
+Step 9:
+
+Input Operation: Verify RBM_DeleteEntryADISS with parameters <euuid>, e.g. RBM_DeleteEntryADISS <folder name newly created>.
+Expected Result:
+Return value = 0 (RBM_ok)
+ADISS Entry is deleted
+Actual Results:
+Return value = 0 (RBM_ok)
+Step 10:
+
+Input Operation: Verify the API RBM_GetState().
+Expected Result: Returns Current State = Buffering (2).
+Actual Results: Returns Current State = Buffering (2).
+Step 11:
+
+Input Operation: Verify the API to enter into RBM_EnterStandBy.
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Step 12:
+
+Input Operation: Verify the API RBM_ReInit to enter into Init state.
+Expected Result: Return value = 0 (RBM_ok).
+Actual Results: Return value = 0 (RBM_ok).
+Post-Condition
+Power down the ECU.
+Putty is closed.

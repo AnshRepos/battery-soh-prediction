@@ -1,0 +1,16 @@
+{
+  "project_area": "Your_Project_Area_Name",
+  "default_test_plan_id": "YOUR_TEST_PLAN_ID", 
+  "test_plan_title": "Your_Test_Plan_Title",
+  "configuration_context": "YOUR_CONFIGURATION_CONTEXT_URL",  //https://rb-alm-14-p.de.bosch.com/qm/oslc_config/resources/com.ibm.team.vvc.Configuration/_pjQkUUVtEe2W2KTg8MMCcw
+  "required_categories": {
+    "ASIL_Rating": "QM",
+    "Regression Test": "Yes",
+    "Test Level": "Integration Test",
+    "Subsystem/Function": "RBM"
+  },
+  "example_test_case_id": "539942",
+  "example_test_case_title": "TCS_GlobalTimeSync_uP_10G_Interface",
+  "component_uri": "_pjaUYEVtEe2W2KTg8MMCcw",
+  "stream_uri": "_pjQkUUVtEe2W2KTg8MMCcw"
+}

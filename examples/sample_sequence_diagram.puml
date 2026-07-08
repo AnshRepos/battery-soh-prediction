@@ -1,0 +1,94 @@
+@startuml ECU Communication Sequence
+
+title ECU → CAN Gateway → Sensor Communication Flow
+
+' Participants
+participant "ECU Controller" as ECU
+participant "CAN Gateway" as CAN
+entity "Temperature Sensor" as Sensor
+
+' Initialization Phase
+group Initialization
+    ECU -> CAN : init()
+    activate CAN
+    CAN --> ECU : initSuccess
+    deactivate CAN
+    
+    ECU -> CAN : configureCANBus(500kbps)
+    activate CAN
+    CAN -> CAN : setupBusParameters()
+    CAN --> ECU : busConfigured
+    deactivate CAN
+end
+
+' Configuration Phase
+group Configuration
+    CAN -> Sensor : readConfig()
+    activate Sensor
+    Sensor -> Sensor : loadConfiguration()
+    Sensor --> CAN : configData(sensorId, range)
+    deactivate Sensor
+    
+    CAN -> ECU : sensorConfigReceived(configData)
+    activate ECU
+    ECU -> ECU : storeConfiguration()
+    ECU --> CAN : configAcknowledged
+    deactivate ECU
+end
+
+' Data Exchange Phase
+group Data Exchange
+    loop every 100ms
+        ECU ->> CAN : requestSensorData(0x123)
+        CAN ->> Sensor : pollData()
+        
+        alt data available
+            Sensor -->> CAN : sensorData(temperature)
+            CAN -->> ECU : dataReceived(0x123, temperature)
+        else no data
+            Sensor -->> CAN : dataNotAvailable()
+            CAN -->> ECU : noDataError(0x123)
+        end
+    end
+end
+
+' Error Handling
+group Error Handling
+    opt timeout occurred
+        ECU -> CAN : checkBusStatus()
+        activate CAN
+        
+        alt bus operational
+            CAN --> ECU : busOK()
+        else bus error
+            CAN --> ECU : busError(code)
+            ECU -> CAN : resetBus()
+        end
+        
+        deactivate CAN
+    end
+end
+
+' Shutdown Phase
+group Shutdown
+    ECU -> CAN : shutdown()
+    activate CAN
+    CAN -> Sensor : disconnect()
+    Sensor --> CAN : disconnected
+    CAN --> ECU : shutdownComplete
+    deactivate CAN
+end
+
+note right of ECU
+  ECU Controller manages the
+  complete communication flow
+  with error recovery
+end note
+
+note left of Sensor
+  Sensor responds to
+  polling requests
+  with temperature data
+end note
+
+@enduml

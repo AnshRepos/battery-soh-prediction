@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a></li>
+  <li><a href="#USAGE">USAGE</a></li>
+  <li><a href="#ENVIRONMENT">ENVIRONMENT</a></li>
+  <li><a href="#KNOWN-BUGS">KNOWN BUGS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>tkpod - Perl/Tk Pod browser</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    tkpod   [-tk] [[-no]tree] [-Mblib] [-I dir] [-d|debug] [-s|server]
+            [-filedialog module]
+            [-f function | -q FAQRegex | directory | name [...]]</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>tkpod</b> is a simple Pod browser with hypertext capabilities. Pod (<a href="../lib/pods/perlpod.html">Plain Old Document</a>) is a simple and readable markup language that could be mixed with <a href="../lib/pods/perl.html">perl</a> code.</p>
+
+<p>Pods are searched by default in <code>@INC</code> and <code><span class="variable">$ENV</span><span class="operator">{</span><span class="string">PATH</span><span class="operator">}</span>
+</code>. Directories listed on the command line or with the <b>-I</b> option are added to the default search path.</p>
+
+<p>For each <code>name</code> listed on the command line <b>tkpod</b> tries to find Pod in <code>name</code>, <code>name.pod</code> and <code>name.pm</code> in the search path. For each <code>name</code> a new Pod browser window is opened.</p>
+
+<p>If no <code>name</code> is listed, then the main <code>perl</code> pod is opened instead.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<dl>
+
+<dt id="tree"><b>-tree</b></dt>
+<dd>
+
+<p>When specified, <code>tkpod</code> will show a tree window with all available Pods on the local host. However, this may be slow on startup, especially first time because there is no cache yet. You can always turn on the tree view with the menu entry &#39;View&#39; -&gt; &#39;Pod Tree&#39;.</p>
+
+</dd>
+<dt id="tk"><b>-tk</b></dt>
+<dd>
+
+<p>Useful for perl/Tk documentation. When specified it adds all <code>Tk</code> subdirectories in <code>@INC</code> to the Pod search path. This way when <code>Scrolled</code> is selected in the browser the <code>Tk/Scrolled</code> documentation is found.</p>
+
+</dd>
+<dt id="s-or--server"><b>-s</b> or <b>-server</b></dt>
+<dd>
+
+<p>Start <code>tkpod</code> in server mode. Subsequent calls to <code>tkpod</code> (without the <b>-s</b> option) will cause to load the requested Pods into the server program, thus minimizing startup time and memory usage. Note that there is no access control, so this might be a security hole!</p>
+
+</dd>
+<dt id="d-or--debug"><b>-d</b> or <b>-debug</b></dt>
+<dd>
+
+<p>Turn debugging on.</p>
+
+</dd>
+<dt id="Mblib"><b>-Mblib</b></dt>
+<dd>
+
+<p>Add the <code>blib</code> directories under the current directory to the Pod search path.</p>
+
+</dd>
+<dt id="I-dir"><b>-I</b> <i>dir</i></dt>
+<dd>
+
+<p>Add another directory to the Pod search path. Note that the space is mandatory.</p>
+
+</dd>
+<dt id="f-function"><b>-f</b> <i>function</i></dt>
+<dd>
+
+<p>Show documentation for <i>function</i>.</p>
+
+</dd>
+<dt id="q-FAQRegex"><b>-q</b> <i>FAQRegex</i></dt>
+<dd>
+
+<p>Show the FAQ entry matching <i>FAQRegex</i>.</p>
+
+</dd>
+<dt id="filedialog-module"><b>-filedialog</b> <i>module</i></dt>
+<dd>
+
+<p>Use an alternative file dialog module, e.g. <a href="../site/lib/Tk/FileSelect.html">Tk::FileSelect</a>, <a href="../site/lib/Tk/FBox.html">Tk::FBox</a> or <a>Tk::PathEntry::Dialog</a>.</p>
+
+</dd>
+</dl>
+
+<h1 id="USAGE">USAGE</h1>
+
+<p>How to navigate with the Pod browser is described in <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod_usage.html">Tk::Pod_usage</a>. It&#39;s also accessible via the menu &#39;Help&#39; -&gt; &#39;Usage...&#39;.</p>
+
+<h1 id="ENVIRONMENT">ENVIRONMENT</h1>
+
+<dl>
+
+<dt id="TKPODPORT">TKPODPORT</dt>
+<dd>
+
+<p>Force a port for tkpod&#39;s server mode.</p>
+
+</dd>
+<dt id="TKPODDIRS">TKPODDIRS</dt>
+<dd>
+
+<p>A list of directories (on Unix usually separated by <code>:</code>, on Windows by <code><span class="operator">;</span>
+</code>) for additional Pod directories. These directories will appear in the &quot;local dirs&quot; section of the tree view.</p>
+
+</dd>
+</dl>
+
+<p>See <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod/Text.html#Environment">&quot;Environment&quot; in Tk::Pod::Text</a> and <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod/FindPods.html#Environment">&quot;Environment&quot; in Tk::Pod::FindPods</a> for more environment variables.</p>
+
+<h1 id="KNOWN-BUGS">KNOWN BUGS</h1>
+
+<p>see <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod/Text.html">Tk::Pod::Text</a></p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../lib/pods/perlpod.html">perlpod</a> <a href="../bin/pod2man.html">pod2man</a> <a href="../bin/pod2text.html">pod2text</a> <a href="../bin/pod2html.html">pod2html</a> <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod.html">Tk::Pod</a> <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod/Text.html">Tk::Pod::Text</a> <a href="../../../Windows/TEMP/ppm-TF73Pw/Tk-Pod-0.9942/blib/lib/Tk/Pod/Tree.html">Tk::Pod::Tree</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Nick Ing-Simmons &lt;<i>nick@ni-s.u-net.com</i>&gt;</p>
+
+<p>Former maintainer: Achim Bohnet &lt;<i>ach@mpe.mpg.de</i>&gt;.</p>
+
+<p>Code currently maintained by Slaven Rezic &lt;<i>slaven@rezic.de</i>&gt;.</p>
+
+<p>Copyright (c) 1997-1998 Nick Ing-Simmons. All rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+</body>
+
+</html>
+
+

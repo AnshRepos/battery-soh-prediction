@@ -1,0 +1,112 @@
+@startuml EcuKnockOut_Sequence
+
+title ECU Knock-Out Timer Management
+
+participant "OPMM" as OPMM
+participant "ARA_S2S" as ARA_S2S
+participant "ARA_PER(KVS)" as KVS
+participant "rbdm" as rbdm
+participant "ASW" as ASW
+
+== POST-RUN State Reached ==
+
+OPMM -> ARA_S2S: RBX_OPMM_MODE_RESPONSE_POST_RUN_STATE_REACHED
+
+OPMM -> KVS: rbx_opmm_ECUKnockout_Write_To_Kvs
+KVS -> OPMM: rbx_opmm_ECUKnockoutTimer_Read_From_Kvs
+
+OPMM -> OPMM: Knockout timer Running
+
+rbdm -> OPMM: KnockoutTestMode
+
+note over OPMM
+  OPMM Switch To RunState 
+  When Veto Active
+end note
+
+opt KL15_ON
+  note over OPMM
+    OPMM in VETO State
+    (VETO Timer: 120 seconds)
+  end note
+end
+
+OPMM -> ARA_S2S: OperatingModesKeepAliveRequests_DRB
+ARA_S2S -> OPMM: OperatingModeRequest_PowerBlade-RunState
+
+note over OPMM
+  Veto Timer Expired (120 Sec)
+  Proceed with Shutdown
+end note
+
+== Knock-Out Timer Running ==
+
+rbdm -> OPMM: KnockoutTestMode
+
+note over OPMM
+  OPMM Switch To RunState When
+  KnockOut Timer is Running
+end note
+
+opt KL15_ON
+  note over OPMM
+    KL15 ON signal detected
+    Return to RUN state
+  end note
+end
+
+OPMM -> ARA_S2S: OperatingModesKeepAliveRequests_DRB
+ARA_S2S -> OPMM: OperatingModeRequest_PowerBlade-RunState
+
+note over OPMM
+  OPMM Switch To RunState When
+  KnockOut Timer is Running
+end note
+
+== Knock-Out Timer Expired ==
+
+note over OPMM
+  Continue With KnockOut Timer
+end note
+
+OPMM -> OPMM: KnockOut Timer Timeout
+
+note over OPMM
+  Knockout Timer Expired
+end note
+
+note over OPMM
+  Increment the counter by 1
+  and Store it in ARA_PER Kvs
+end note
+
+OPMM -> KVS: WriteKvs
+
+note over OPMM
+  OPMM Proceed for Safe Shutdown
+end note
+
+note right of OPMM
+  **ECU Knock-Out Timer Flow:**
+  
+  1. POST-RUN State:
+     - VETO Timer: 120 seconds
+     - If KL15 ON → Return to RUN
+     - If Timer Expires → Proceed to Shutdown
+  
+  2. Knock-Out Timer:
+     - Runs after VETO expiration
+     - Can be interrupted by KL15 ON
+     - Timeout → Increment counter in KVS
+  
+  3. Counter Management:
+     - Counter stored persistently in KVS
+     - Incremented on each shutdown attempt
+     - Used for ECU health monitoring
+  
+  4. Safe Shutdown:
+     - After counter update
+     - OPMM proceeds with graceful shutdown
+end note
+
+@enduml

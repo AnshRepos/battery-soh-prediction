@@ -1,0 +1,213 @@
+<?xml version="1.0" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<!-- saved from url=(0017)http://localhost/ -->
+<script language="JavaScript" src="../displayToc.js"></script>
+<script language="JavaScript" src="../tocParas.js"></script>
+<script language="JavaScript" src="../tocTab.js"></script>
+<link rel="stylesheet" type="text/css" href="../scineplex.css">
+<title></title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+
+
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+</ul>
+
+<h1 id="NAME">NAME</h1>
+
+<p>lwp-request, GET, POST, HEAD - Simple command line user agent</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>lwp-request</b> [<b>-afPuUsSedvhx</b>] [<b>-m</b> <i>method</i>] [<b>-b</b> <i>base URL</i>] [<b>-t</b> <i>timeout</i>] [<b>-i</b> <i>if-modified-since</i>] [<b>-c</b> <i>content-type</i>] [<b>-C</b> <i>credentials</i>] [<b>-p</b> <i>proxy-url</i>] [<b>-o</b> <i>format</i>] <i>url</i>...</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This program can be used to send requests to WWW servers and your local file system. The request content for POST and PUT methods is read from stdin. The content of the response is printed on stdout. Error messages are printed on stderr. The program returns a status value indicating the number of URLs that failed.</p>
+
+<p>The options are:</p>
+
+<dl>
+
+<dt id="m-method">-m &lt;method&gt;</dt>
+<dd>
+
+<p>Set which method to use for the request. If this option is not used, then the method is derived from the name of the program.</p>
+
+</dd>
+<dt id="f">-f</dt>
+<dd>
+
+<p>Force request through, even if the program believes that the method is illegal. The server might reject the request eventually.</p>
+
+</dd>
+<dt id="b-uri">-b &lt;uri&gt;</dt>
+<dd>
+
+<p>This URI will be used as the base URI for resolving all relative URIs given as argument.</p>
+
+</dd>
+<dt id="t-timeout">-t &lt;timeout&gt;</dt>
+<dd>
+
+<p>Set the timeout value for the requests. The timeout is the amount of time that the program will wait for a response from the remote server before it fails. The default unit for the timeout value is seconds. You might append &quot;m&quot; or &quot;h&quot; to the timeout value to make it minutes or hours, respectively. The default timeout is &#39;3m&#39;, i.e. 3 minutes.</p>
+
+</dd>
+<dt id="i-time">-i &lt;time&gt;</dt>
+<dd>
+
+<p>Set the If-Modified-Since header in the request. If <i>time</i> is the name of a file, use the modification timestamp for this file. If <i>time</i> is not a file, it is parsed as a literal date. Take a look at <a href="../lib/HTTP/Date.html">HTTP::Date</a> for recognized formats.</p>
+
+</dd>
+<dt id="c-content-type">-c &lt;content-type&gt;</dt>
+<dd>
+
+<p>Set the Content-Type for the request. This option is only allowed for requests that take a content, i.e. POST and PUT. You can force methods to take content by using the <code>-f</code> option together with <code>-c</code>. The default Content-Type for POST is <code>application/x-www-form-urlencoded</code>. The default Content-type for the others is <code>text/plain</code>.</p>
+
+</dd>
+<dt id="p-proxy-url">-p &lt;proxy-url&gt;</dt>
+<dd>
+
+<p>Set the proxy to be used for the requests. The program also loads proxy settings from the environment. You can disable this with the <code>-P</code> option.</p>
+
+</dd>
+<dt id="P">-P</dt>
+<dd>
+
+<p>Don&#39;t load proxy settings from environment.</p>
+
+</dd>
+<dt id="H-header">-H &lt;header&gt;</dt>
+<dd>
+
+<p>Send this HTTP header with each request. You can specify several, e.g.:</p>
+
+<pre><code>    lwp-request \
+        -H &#39;Referer: http://other.url/&#39; \
+        -H &#39;Host: somehost&#39; \
+        http://this.url/</code></pre>
+
+</dd>
+<dt id="C-username:password">-C &lt;username&gt;:&lt;password&gt;</dt>
+<dd>
+
+<p>Provide credentials for documents that are protected by Basic Authentication. If the document is protected and you did not specify the username and password with this option, then you will be prompted to provide these values.</p>
+
+</dd>
+</dl>
+
+<p>The following options controls what is displayed by the program:</p>
+
+<dl>
+
+<dt id="u">-u</dt>
+<dd>
+
+<p>Print request method and absolute URL as requests are made.</p>
+
+</dd>
+<dt id="U">-U</dt>
+<dd>
+
+<p>Print request headers in addition to request method and absolute URL.</p>
+
+</dd>
+<dt id="s">-s</dt>
+<dd>
+
+<p>Print response status code. This option is always on for HEAD requests.</p>
+
+</dd>
+<dt id="S">-S</dt>
+<dd>
+
+<p>Print response status chain. This shows redirect and authorization requests that are handled by the library.</p>
+
+</dd>
+<dt id="e">-e</dt>
+<dd>
+
+<p>Print response headers. This option is always on for HEAD requests.</p>
+
+</dd>
+<dt id="E">-E</dt>
+<dd>
+
+<p>Print response status chain with full response headers.</p>
+
+</dd>
+<dt id="d">-d</dt>
+<dd>
+
+<p>Do <b>not</b> print the content of the response.</p>
+
+</dd>
+<dt id="o-format">-o &lt;format&gt;</dt>
+<dd>
+
+<p>Process HTML content in various ways before printing it. If the content type of the response is not HTML, then this option has no effect. The legal format values are; <i>text</i>, <i>ps</i>, <i>links</i>, <i>html</i> and <i>dump</i>.</p>
+
+<p>If you specify the <i>text</i> format then the HTML will be formatted as plain latin1 text. If you specify the <i>ps</i> format then it will be formatted as Postscript.</p>
+
+<p>The <i>links</i> format will output all links found in the HTML document. Relative links will be expanded to absolute ones.</p>
+
+<p>The <i>html</i> format will reformat the HTML code and the <i>dump</i> format will just dump the HTML syntax tree.</p>
+
+<p>Note that the <code>HTML-Tree</code> distribution needs to be installed for this option to work. In addition the <code>HTML-Format</code> distribution needs to be installed for <i>-o text</i> or <i>-o ps</i> to work.</p>
+
+</dd>
+<dt id="v">-v</dt>
+<dd>
+
+<p>Print the version number of the program and quit.</p>
+
+</dd>
+<dt id="h">-h</dt>
+<dd>
+
+<p>Print usage message and quit.</p>
+
+</dd>
+<dt id="a">-a</dt>
+<dd>
+
+<p>Set text(ascii) mode for content input and output. If this option is not used, content input and output is done in binary mode.</p>
+
+</dd>
+</dl>
+
+<p>Because this program is implemented using the LWP library, it will only support the protocols that LWP supports.</p>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p><a href="../bin/lwp-mirror.html">lwp-mirror</a>, <a href="../lib/LWP.html">LWP</a></p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 1995-1999 Gisle Aas.</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Gisle Aas &lt;gisle@aas.no&gt;</p>
+
+
+</body>
+
+</html>
+
+
