@@ -1,0 +1,1 @@
+﻿This is a temporary validation artifact for testing the publisher workflow.
