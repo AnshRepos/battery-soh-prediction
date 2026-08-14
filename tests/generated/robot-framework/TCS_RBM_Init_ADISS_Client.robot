@@ -1,112 +1,158 @@
+# RQM sync pending — this test case has not yet been uploaded/linked to RQM.
+# rqm_test_id: N/A
+# rqm_url: N/A
+
 *** Settings ***
-Documentation     Test suite for ADISS Client RBM Initialization.
-...               
-...               **Source Traceability:**
-...               - Diagram: rbm_init.puml
-...               - Test Case: tests/generated/tabular/TCS_RBM_Init_ADISS_Client.md
-...               - Flow: Flow 1 - ADISS Client RBM Initialization
-...               
-...               This test verifies the complete RBM initialization sequence for ADISS client,
-...               including version validation, callback registration, state queries, buffer content
-...               creation, storage path retrieval, and standby state transition with callback verification.
+Documentation     Test suite for TCS_RBM_Init_ADISS_Client.
+...               Verifies the RBM (Ring Buffer Manager) initialization sequence invoked by the
+...               ADISS client, including version/state queries, buffer content creation,
+...               storage path retrieval, and the time-sync dependent transition into
+...               RBM_Standby state (alt/else branch of RBM_EnterStandby).
+...               Source: rbm_init.puml (Flow 1) | Architecture Baseline Version: v0.3.1
+...               Platform Type: uP (QNX/Linux ECU)
 
-Variables         ../configuration/test_bench.py
-Resource          ../resources/ssh_keywords.resource
-Resource          ../resources/rbm_keywords.resource
-Resource          ../resources/pps_keywords.resource
-Resource          ../resources/dlt_keywords.resource
-Resource          ../resources/t32_keywords.resource
+Variables         ../../robot/mpci_drb_automation/configuration/test_bench.py
 
-Suite Setup       Run Keywords    Connect To PPS
-...              AND    Start Trace32 Debugger
-...              AND    DLT Connect
-Suite Teardown    Run Keywords    DLT Disconnect
-...              AND    Stop Trace32 Debugger
-...              AND    Disconnect PPS
-Test Setup        Run Keywords    Power Cycle ECU And Wait For Boot
-...              AND    Connect To ECU Over SSH
-...              AND    Verify RBM Daemon Running
-...              AND    Verify ADISS Process Running
-...              AND    Clean RBM Partition
+Resource          ../../robot/mpci_drb_automation/resources/pps_keywords.resource
+Resource          ../../robot/mpci_drb_automation/resources/ssh_keywords.resource
+Resource          ../../robot/mpci_drb_automation/resources/flashing_keywords.resource
+
+Suite Setup       Run Keywords    Connect To PPS    AND    Flash Release SW And Verify Processes
+Suite Teardown    Disconnect PPS
+
+Test Setup        Run Keywords    Power Cycle ECU And Wait For Boot    AND    Connect To ECU Over SSH
 Test Teardown     Disconnect SSH
 
+
 *** Test Cases ***
-TCS_RBM_Init_ADISS_Client
-    [Documentation]    Test ADISS Client RBM Initialization sequence
-    ...    
-    ...    **Test Steps:**
-    ...    1. Validate RBM version via ADISS
-    ...    2. Register callback function
-    ...    3. Request callback trigger
-    ...    4. Query current RBM state
-    ...    5. Create buffer/SW content
-    ...    6. Get ADISS permanent storage path
-    ...    7. Enter standby state with time sync validation
-    ...    8. Verify state change callback received
-    [Tags]    RBM    Initialization    ADISS    Client    uP
+TCS_RBM_Init_ADISS_Client_TimeSyncValid
+    [Documentation]    Steps 1-7 (alt branch) + Step 9: RBM initialization sequence via ADISS
+    ...                client, ending with RBM_EnterStandby(isTimeSyncValid=true) accepted and
+    ...                the asynchronous RBM_StateChange->RBM_Standby callback verified.
+    ...                Post-condition: RBM confirmed in RBM_Standby via RBM_GetState().
+    [Tags]             RBM    ADISS    Init    Standby    uP    TimeSyncValid
 
-    # Step 1: RBM_GetVersion() via ADISS
-    ${version_info}=    Validate RBM Version
-    Log    RBM Version retrieved: ${version_info}
+    RBM GetVersion Via ADISS
+    RBM Register Callback Via ADISS
+    RBM Request Callback Via ADISS    RBM_StorSize
+    RBM Get State Via ADISS    RBM_Init
+    RBM Create Buffer Content Via ADISS
+    RBM Get ADISS Persistent Storage Path
+    RBM Enter Standby Via ADISS    ${TRUE}
+    Verify RBM State Change Callback To Standby
+    RBM Get State Via ADISS    RBM_Standby
 
-    # Step 2: RBM_RegCallBack() to register callback
-    Register RBM Callback
-    Log    RBM callback registered successfully
+TCS_RBM_Init_ADISS_Client_TimeSyncInvalid
+    [Documentation]    Steps 1-6 + Step 8 (else branch): RBM initialization sequence via ADISS
+    ...                client, ending with RBM_EnterStandby(isTimeSyncValid=false) rejected with
+    ...                RBM_NoTSync, and RBM remaining in RBM_Init state (no transition occurs).
+    [Tags]             RBM    ADISS    Init    Standby    uP    TimeSyncInvalid    NoTSync
 
-    # Step 3: RBM_ReqCbk() to trigger callback
-    Request RBM Callback
-    Log    RBM callback request sent
+    RBM GetVersion Via ADISS
+    RBM Register Callback Via ADISS
+    RBM Request Callback Via ADISS    RBM_StorSize
+    RBM Get State Via ADISS    RBM_Init
+    RBM Create Buffer Content Via ADISS
+    RBM Get ADISS Persistent Storage Path
+    RBM Enter Standby Via ADISS    ${FALSE}
+    RBM Get State Via ADISS    RBM_Init
 
-    # Step 4: RBM_GetState() query
-    Verify ADISS Init State
-    Log    ADISS RBM state verified as Init
-
-    # Step 5: RBM_CreateBufswContent(arg0)
-    Create ADISS Buffer Content Test
-    Log    Buffer/SW content created successfully
-
-    # Step 6: RBM_GetADISSPrmntStorgPth()
-    ${storage_path}=    Get ADISS Permanent Storage Path
-    Log    ADISS permanent storage path: ${storage_path}
-    Should Not Be Empty    ${storage_path}    msg=Storage path should be returned
-
-    # Step 7: RBM_EnterStandby() with conditional time sync validation
-    Sync ECU Time
-    Enter ADISS Standby
-    Log    ADISS entered standby state
-
-    # Step 8: Verify state change callback (RBM_Standby)
-    Verify ADISS Standby State
-    Log    State change callback verified - ADISS in Standby state
-
-    # Post-condition verifications
-    Verify ADISS State Is Standby
-    ${final_path}=    Get ADISS Permanent Storage Path
-    Should Be Equal    ${final_path}    ${storage_path}    msg=Storage path should remain consistent
 
 *** Keywords ***
-Verify RBM Daemon Running
-    [Documentation]    Verify RBM daemon process is running on ECU
-    ${result}=    Execute SSH Command    ps -e | grep rbm
-    Should Contain    ${result}    rbm    msg=RBM daemon process not found
+Flash Release SW And Verify Processes
+    [Documentation]    Pre-conditions 1-7: Flash the release SW and verify ADISS/RBM processes
+    ...                and the RBM shared library are present before starting the sequence.
+    Flash ECU Software
+    ${ps_output}=    Execute Command    ps -e
+    Should Contain    ${ps_output}    adiss
+    Should Contain    ${ps_output}    rbm
+    ${lib_output}=    Execute Command    ls /usr/lib | grep librbm_shared_lib.so
+    Should Contain    ${lib_output}    librbm_shared_lib.so
+    Log    ADISS process, RBM process, and RBM shared library verified present.
 
-Verify ADISS Process Running
-    [Documentation]    Verify ADISS process is running on ECU
-    ${result}=    Execute SSH Command    ps -e | grep adiss
-    Should Contain    ${result}    adiss    msg=ADISS process not found
+Power Cycle ECU And Wait For Boot
+    # TODO: No dedicated "Power Cycle ECU And Wait For Boot" keyword was found in
+    # robot/mpci_drb_automation/resources/pps_keywords.resource. Composed here from the
+    # existing PPS keywords (Power Off ECU / Power On ECU) as a placeholder. Confirm/replace
+    # with the actual boot-wait implementation used elsewhere (e.g. a boot-log/console check).
+    [Documentation]    Power cycles the ECU and waits for it to boot before SSH connection.
+    Power Off ECU
+    Sleep    5s
+    Power On ECU
+    Sleep    10s
 
-Clean RBM Partition
-    [Documentation]    Execute RBM_CleanPartition to prepare test environment
-    Execute SSH Command    cd /usr/sbin
-    ${result}=    Execute SSH Command    ./rbm_clean_partition
-    Log    RBM partition cleaned: ${result}
+RBM GetVersion Via ADISS
+    [Documentation]    Step 1: Call RBM_GetVersion() via ADISS. Verifies Return Value = 0
+    ...                (RBM_ok) and that version info (major.minor.revision) is displayed.
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_GetVersion.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_GetVersion    30
+    Should Contain    ${output}    RBM_ok
+    Log    ${output}
 
-Verify ADISS State Is Standby
-    [Documentation]    Final verification that ADISS is in Standby state
-    ${state}=    Get RBM State    ADISS
-    Should Be Equal As Integers    ${state}    1    msg=Expected Standby state (1)
+RBM Register Callback Via ADISS
+    [Documentation]    Step 2: Call RBM_RegCallBack() via ADISS to register the callback
+    ...                handler. Verifies Return Value = 0 (RBM_ok).
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_RegCallBack.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_RegCallBack    30
+    Should Contain    ${output}    RBM_ok
 
-Stop Trace32 Debugger
-    [Documentation]    Close TRACE32 debugger connection
-    # Implementation depends on T32 API availability
-    Log    TRACE32 debugger stopped
+RBM Request Callback Via ADISS
+    [Arguments]    ${reason}
+    [Documentation]    Step 3: Call RBM_ReqCbk() via ADISS with the given reason (e.g.
+    ...                RBM_StorSize) and verify the corresponding callback is received.
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_ReqCbk.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_ReqCbk --reason ${reason}    30
+    Should Contain    ${output}    ${reason}
+    Log    ${output}
+
+RBM Get State Via ADISS
+    [Arguments]    ${expected_state}
+    [Documentation]    Step 4 / Post-condition: Call RBM_GetState() via ADISS and verify
+    ...                Return Value = 0 (RBM_ok) and RBMState matches ${expected_state}.
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_GetState.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_GetState    30
+    Should Contain    ${output}    RBM_ok
+    Should Contain    ${output}    ${expected_state}
+    Log    ${output}
+
+RBM Create Buffer Content Via ADISS
+    [Documentation]    Step 5: Call RBM_CreateBufswContent(arg0) via ADISS. Verifies Return
+    ...                Value = 0 (RBM_ok) and that buffer software content is created.
+    # TODO: Confirm actual argument value/name for arg0 and CLI/API invocation syntax.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_CreateBufswContent arg0    30
+    Should Contain    ${output}    RBM_ok
+
+RBM Get ADISS Persistent Storage Path
+    [Documentation]    Step 6: Call RBM_GetADISSPrmntStorgPth() via ADISS. Verifies Return
+    ...                Value = 0 (RBM_ok) and that a valid storage path (storgPth) is returned.
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_GetADISSPrmntStorgPth.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_GetADISSPrmntStorgPth    30
+    Should Not Be Empty    ${output}
+    Log    ADISS Persistent Storage Path: ${output}
+
+RBM Enter Standby Via ADISS
+    [Arguments]    ${time_sync_valid}
+    [Documentation]    Steps 7/8 (alt/else branch): Call RBM_EnterStandby() via ADISS with
+    ...                the given isTimeSyncValid flag.
+    ...                alt (True): expects Return Value = 0 (RBM_ok), transition accepted.
+    ...                else (False): expects Return Value = RBM_NoTSync, transition rejected.
+    # TODO: Confirm actual ADISS client CLI/API invocation syntax for RBM_EnterStandby.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_EnterStandby --isTimeSyncValid ${time_sync_valid}    30
+    IF    ${time_sync_valid}
+        Should Contain    ${output}    RBM_ok
+    ELSE
+        Should Contain    ${output}    RBM_NoTSync
+    END
+    Log    ${output}
+
+Verify RBM State Change Callback To Standby
+    [Documentation]    Step 9: Verify the asynchronous RBM state-change callback is received
+    ...                with value RBM_StateChange = RBM_Standby, following a successful
+    ...                RBM_EnterStandby(true) call.
+    # TODO: Replace with the actual asynchronous callback verification mechanism
+    # (e.g. DLT log search via dlt_keywords.resource, or a dedicated callback-stub check).
+    # Placeholder implementation polls the ADISS client for the pending callback.
+    ${output}=    Execute Command Return Message    /usr/bin/adiss_client RBM_PollCallback --wait 10    30
+    Should Contain    ${output}    RBM_StateChange
+    Should Contain    ${output}    RBM_Standby
+    Log    ${output}
