@@ -1,0 +1,17 @@
+{
+  "test_case_name": "TCS_RBM_Init",
+  "source": "examples/diagrams/rbm_init.puml",
+  "generated_on": "2026-08-14",
+  "platform_type": "uP",
+  "artifacts": [
+    "tests/generated/tabular/rbm_init_tests.md",
+    "tests/generated/tabular/TCS_RBM_Init_ADISS.md",
+    "tests/generated/tabular/TCS_RBM_Init_RDC.md",
+    "tests/generated/tabular/TCS_RBM_Init_SDSOM_Client.md",
+    "tests/generated/robot-framework/rbm_init_scripts.robot",
+    "tests/generated/robot-framework/TCS_RBM_Init_ADISS.robot",
+    "tests/generated/robot-framework/TCS_RBM_Init_RDC.robot",
+    "tests/generated/robot-framework/TCS_RBM_Init_SDSOM_Client.robot"
+  ],
+  "notes": "Generated from rbm_init.puml. Contains ADISS, RDC and SDSOM client test cases and supporting tabular descriptions. Excludes metadata files unless explicitly approved for publication."
+}
