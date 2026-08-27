@@ -1,0 +1,13 @@
+﻿{
+  "source_diagram": "examples/diagrams/rbm_init.puml",
+  "generated_files": [
+    "tests/generated/tabular/TCS_RBM_Init_ADISS.md",
+    "tests/generated/tabular/TCS_RBM_Init_RDC.md",
+    "tests/generated/tabular/TCS_RBM_Init_SDSOM.md",
+    "tests/generated/robot-framework/TCS_RBM_Init_ADISS.robot",
+    "tests/generated/robot-framework/TCS_RBM_Init_RDC.robot",
+    "tests/generated/robot-framework/TCS_RBM_Init_SDSOM.robot"
+  ],
+  "platform": "uP",
+  "generated_at": "2026-08-27T00:00:00Z"
+}
