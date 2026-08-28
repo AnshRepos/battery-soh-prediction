@@ -1,0 +1,4 @@
+﻿RobotFrameworkDestination:
+  path: tests/robot-framework/
+  allowlist: ['*.robot']
+  protect: false
